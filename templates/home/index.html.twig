@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="row">
+        <div class="col"></div>
+        <div class="col-12 mt-5">
+            <div class="jumbotron">
+                <h3 class="display-5">Bienvenue !</h3>
+                <p class="lead">Gardez un oeil sur vos dépenses, quel que soit leurs types.</p>
+                <hr class="my-4">
+                <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+                <p class="lead pt-3">
+                    {% if app.user is null or app.user is not defined %}    
+                        <a class="btn btn-primary btn-lg" href="{{ path('app_login') }}" role="button" style="width: 100%">Connexion</a>                
+                    {% elseif app.user is not null and app.user is defined %}
+                        <div class="row col-md-12">
+                            <div class="col-md-6">
+                                <a class="btn btn-info btn-lg" href="{{ path('app_login') }}" role="button" style="width: 100%">Charges fixes</a>                
+                            </div>
+                            <div class="col-md-6">
+                                <a class="btn btn-success btn-lg" href="{{ path('app_login') }}" role="button" style="width: 100%">Alimentation</a>                
+                            </div>
+                        </div>                        
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+        <div class="col"></div>
+    </div>
+
+{% endblock %}
