@@ -27,7 +27,7 @@ final class Version20210111190528 extends AbstractMigration
         $this->addSql('CREATE TABLE parametres (id INT AUTO_INCREMENT NOT NULL, clee VARCHAR(255) NOT NULL, valeur VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('ALTER TABLE alimentation ADD CONSTRAINT FK_8E65DFA0BCF5E72D FOREIGN KEY (categorie_id) REFERENCES categorie_alimentation (id)');
         $this->addSql('ALTER TABLE charges ADD CONSTRAINT FK_3AEF501ABCF5E72D FOREIGN KEY (categorie_id) REFERENCES categorie_charge (id)');
-        $this->addSql('ALTER TABLE user CHANGE roles roles JSON NOT NULL');
+        $this->addSql('ALTER TABLE user CHANGE roles roles TEXT NOT NULL');
     }
 
     public function down(Schema $schema) : void
