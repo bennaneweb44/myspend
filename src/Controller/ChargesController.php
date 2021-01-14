@@ -20,7 +20,7 @@ class ChargesController extends AbstractController
     }
 
     /**
-     * @Route("/charges", name="charges")
+     * @Route("/charges", name="charges_list")
      */
     public function index(): Response
     {
