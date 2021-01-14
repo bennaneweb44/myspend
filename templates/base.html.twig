@@ -43,23 +43,21 @@
                 <hr class="d-none d-sm-block" />
                 <ul class="nav navbar-nav navbar-right">
                     {% if app.user %}
-                        <li class="pull-right"><a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a></li>
+                        <li class="pull-right"><a class="nav-link" href="{{ path('app_logout') }}"><i class="fa fa-sign-out"></i> Déconnexion</a></li>
                     {% else %}
                         <li class="pull-right">
-                            <a class="nav-link" href="{{ path('app_login') }}">Se connecter</a>
+                            <a class="nav-link" href="{{ path('app_login') }}"><i class="fa fa-sign-in"></i> Se connecter</a>
                         </li>
                         <li class="pull-right">
-                            <a class="nav-link" href="{{ path('registration') }}">S'inscrire</a>
+                            <a class="nav-link" href="{{ path('registration') }}"><i class="fa fa-user-plus"></i> S'inscrire</a>
                         </li>
                     {% endif %}
                 </ul>
             </div>
         </nav>        
 
-        <div class="container">                                        
-            <div class="row">
-                {% block body %}{% endblock %}
-            </div>
+        <div class="container">                                                    
+            {% block body %}{% endblock %}            
         </div>
 
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -67,5 +65,6 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
          
         {% block javascripts %}{% endblock %}
+        {% block css %}{% endblock %}
     </body>
 </html>

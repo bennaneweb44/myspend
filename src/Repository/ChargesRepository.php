@@ -47,4 +47,30 @@ class ChargesRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function getAllByMonth($month, $year = null) 
+    {    
+        if (!$year) {
+            $year = date('y');
+        }   
+        
+        $query_date = $year . '-'. $month . '-' . '01';                
+
+        // First day of the month.
+        $debut = date('Y-m-01', strtotime($query_date));
+
+        // Last day of the month.
+        $fin =  date('Y-m-t', strtotime($query_date));
+
+        return $this->createQueryBuilder('c')
+            ->select()
+            ->where("c.createdAt >= ?1")
+            ->andWhere("c.createdAt <= ?2")
+            ->setParameter(1, new \DateTime($debut))
+            ->setParameter(2, new \DateTime($fin))
+            ->orderBy('c.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }
