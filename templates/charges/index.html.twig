@@ -10,22 +10,8 @@
 
 <h1 class="text-center mt-4 mb-4"><i class="fa fa-th-list"></i> Charges</h1>
 
-<div class="row containerData">
-    {% if charges |length > 0 %}
-        {% for charge in charges %}
-            <div class="card d-flex mr-2 ml-2 mb-2 bg-success" style="width: 16rem;">        
-                <div class="card-body">
-                    <h5 class="card-title"><b><i class="fa fa-calendar"></i> {{ charge.createdAt |date("d-m-Y") }}</b></h5>
-                    <p class="card-text">{{ charge.libelle }}</p>
-                    <label href="#" class="btn-primary pull-right pr-1 pl-1 montantVignette">{{ charge.montant }} €</label>
-                </div>
-            </div>
-        {% endfor %}
-    {% endif %}
-</div>
-
 <div id="app">
-    <app></app>
+    <Charges></Charges>
 </div>
 
 <!--<div class="example-wrapper">

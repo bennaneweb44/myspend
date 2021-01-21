@@ -2,9 +2,8 @@
 
 namespace App\Entity;
 
-use App\Repository\CategorieChargeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -16,21 +15,25 @@ class CategorieCharge
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups("CategorieCharge:read")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("CategorieCharge:read")
      */
     private $label;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("CategorieCharge:read")
      */
     private $couleur;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("CategorieCharge:read")
      */
     private $icone;
 
@@ -41,16 +44,19 @@ class CategorieCharge
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
+     * @Groups("CategorieCharge:read")
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
+     * @Groups("CategorieCharge:read")
      */
     private $updatedAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Groups("CategorieCharge:read")
      */
     private $deletedAt;
 
@@ -100,13 +106,6 @@ class CategorieCharge
         return $this;
     }
 
-    /**
-     * @return Collection|Charges[]
-     */
-    public function getCharges(): Collection
-    {
-        return $this->charges;
-    }
 
     public function addCharge(Charges $charge): self
     {

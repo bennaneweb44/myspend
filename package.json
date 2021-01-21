@@ -16,8 +16,13 @@
         "build": "encore production --progress"
     },
     "dependencies": {
+        "axios": "^0.21.1",
+        "luxon": "^1.25.0",
         "vue": "^2.6.12",
         "vue-loader": "^15.9.6",
-        "vue-template-compiler": "^2.6.12"
+        "vue-moment": "^4.1.0",
+        "vue-router": "^3.4.9",
+        "vue-template-compiler": "^2.6.12",
+        "weekstart": "^1.0.1"
     }
 }

@@ -21,6 +21,7 @@
 ###< symfony/web-server-bundle ###
 
 composer.lock
+package-lock.json
 
 ###> symfony/webpack-encore-bundle ###
 /node_modules/

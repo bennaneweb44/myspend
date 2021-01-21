@@ -1,25 +1,22 @@
 <template>
   <div>
-    <h2 class="center">My Application</h2>
-    <div v-text="message"></div>
-    {{ message }}
-    <ul>
-      <li :key="word.id" v-for="word in words">{{ word }}</li>
-    </ul>
+    <Charges></Charges>
   </div>
 </template>
 
 <script>
+
+import Charges from './Charges.vue'
+
 export default {
   name: 'app',
   data() {
     return {
-      message: "A list of words",
-      words: []
+      
     };
   },
-  mounted() {
-    console.log('mounted');
+  components: {
+    Charges
   }
 };
 </script>

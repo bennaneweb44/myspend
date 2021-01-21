@@ -2,8 +2,10 @@
 
 namespace App\Entity;
 
-use App\Repository\ChargesRepository;
+use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ChargesRepository::class)
@@ -14,36 +16,42 @@ class Charges
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups("charge:read")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("charge:read")
      */
     private $libelle;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups("charge:read")
      */
     private $montant;
 
     /**
-     * @ORM\ManyToOne(targetEntity=CategorieCharge::class, inversedBy="charges")
+     * @ORM\ManyToOne(targetEntity=CategorieCharge::class, inversedBy="charges")     
      */
     private $categorie;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
+     * @Groups("charge:read")
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
+     * @Groups("charge:read")
      */
     private $updatedAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Groups("charge:read")
      */
     private $deletedAt;
 
