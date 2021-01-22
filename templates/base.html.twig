@@ -19,6 +19,20 @@
                 margin-left: 5%;
                 margin-right: 5%;
             }
+
+            /* Portable */
+            @media all and (max-device-width: 480px)
+            {
+                * {
+                    font-size: 30px;
+                }
+                .container-fluid {
+                    width: 96%;
+                    margin-left: 2%;
+                    margin-right: 2%;
+                }   
+            }
+
         </style>
 
         {% block stylesheets %}
