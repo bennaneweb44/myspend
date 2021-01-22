@@ -1,31 +1,41 @@
 <template>
   <div>
     <ChargesList></ChargesList>
-    <ChargesEdit class="d-none"></ChargesEdit>
   </div>
 </template>
 
 <script>
 
+import Vue from 'vue'
 import ChargesList from './Charges/ChargesList.vue'
-import ChargesEdit from './Charges/ChargesEdit.vue'
+
+// Global methos
+Vue.mixin({
+  methods: {
+    GetFormattedDate(date) {        
+      var month = date . getMonth() +1;
+      var day = date . getDate();
+      var year = date . getFullYear();
+      return year + '-' + (month < 10 ? '0' + month : month) + '-' + day;
+    }
+  },
+})
 
 export default {
   name: 'app',
   data() {
-    return {
-      
-    };
+    return {      
+    }
   },
   components: {
-    ChargesList,
-    ChargesEdit
+    ChargesList
   }
-};
+}
+
 </script>
 
 <style>
-    .center {
-      text-align: center;
-    }
+  .center {
+    text-align: center;
+  }
 </style>

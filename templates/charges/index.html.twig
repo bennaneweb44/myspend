@@ -8,50 +8,45 @@
     <i class="fa fa-th-list"></i> Charges
 </h1>
 
-<div id="app">
-</div>
+<div id="app"></div>
 
 {% endblock %}
 
 {% block css %}
-    <style>
+<style>
 
-        .card-body {
-            margin-top: -15px;   
-            margin-left: -15px;
+    .card-body {
+        margin-top: -15px;   
+        margin-left: -15px;
+    }
+
+    h5.card-title {
+        margin-bottom: 10px;
+    }
+
+    h5.card-title > b{
+        font-size: 20px !important;
+    }
+
+    /* Portable */
+    @media all and (max-device-width: 480px)
+    {
+        #btnSaverCharge {
+            height: 65px !important;
         }
+    }
 
-        h5.card-title {
-            margin-bottom: 10px;
-        }
-
-        h5.card-title > b{
-            font-size: 20px !important;
-        }
-
-        .montantVignette {
-            position: absolute;
-            bottom: 0;
-            right: 10px;
-        }
-
-        /* Portable */
-        @media all and (max-device-width: 480px)
-        {
-            
-        }
-
-        /* Tablette */
-        @media all and (min-device-width: 480px) and (max-device-width: 768px)
-        {
-            
-        }
-
-        /* Ecran large */
-        @media all and (min-device-width: 1440px) 
-        {
-            
-        }      
+    /* Tablette */
+    @media all and (min-device-width: 480px) and (max-device-width: 768px)
+    {
         
-    </style>
+    }
+
+    /* Ecran large */
+    @media all and (min-device-width: 1440px) 
+    {
+        
+    }      
+    
+</style>
 {% endblock %}

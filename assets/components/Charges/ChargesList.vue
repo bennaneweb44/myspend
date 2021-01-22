@@ -1,25 +1,19 @@
 <template>  
   <div class="row">    
-    <div v-for="charge in charges" :key="charge.id" class="card d-flex col-12 col-md-4 p-2 bg-transparent" style="border: none">
-        <div class="card-body bg-success" style="border: 3px solid #000; padding-top: 15px; padding-left: 15px">          
+    <div v-for="charge in charges" :key="charge.id" class="card col-12 col-md-4 p-2" style="border: none; background-color: transparent">
+        <div class="card-body bg-success" style="border: 3px solid #000; border-radius: 12px; padding-top: 15px; padding-left: 15px">          
             <h5 class="card-title">              
               <i class="fa fa-calendar"></i> {{ charge.createdAt | moment("DD/MM/YYYY") }}                   
               <b-button v-b-modal.edit-charge class="fa fa-pencil-square-o pull-right p-1 text-primary" 
-                        style="background-color: transparent; border: none; margin-top: -5px; margin-right: -35px"
-                        @click.prevent="showModalEdit(charge.id)" ></b-button>      
-            </h5>
-            
-            <p class="card-text">{{ charge.libelle }}</p>
-            <label href="#" class="btn-primary pull-right pr-1 pl-1 montantVignette" style="margin-right: 15px; margin-bottom: 25px">{{ charge.montant }} €</label>
+                style="background-color: transparent; border: none; margin-top: -5px; margin-right: -35px"
+                @click.prevent="showModalEdit(charge.id)" 
+                title="Modifer"></b-button>
+            </h5>            
+            <p class="card-text">{{ charge.libelle }}</p>            
+            <label href="#" class="btn-primary pl-1 pr-1 montantVignette" style="margin-right: 13px; margin-bottom: 22px" >{{ charge.montant }} €</label>            
         </div>
-    </div>
-
-    <b-modal id="edit-charge" hide-footer hide-header>      
-      <div class="d-block text-center bg-success">
-        <ChargesEdit></ChargesEdit>
-      </div>
-    </b-modal>
-
+    </div>    
+    <ChargesEdit></ChargesEdit>    
   </div>
 </template>
 
@@ -37,10 +31,10 @@
         charges: {},
         chargeAModifier: {
           id: 0,          
-          date: '',
+          createdAt: '',
           libelle: '',
           montant: 0
-        }
+        }        
       };
     },
     components: {
@@ -59,22 +53,21 @@
     },
     mounted() {
       let app = this;            
-    },
-    beforeCreate() {
-      let app = this;
-      EventBus.$off('charge-a-modifier');           
-    },
+    },    
     methods: {
       showModalEdit(id) {
         let app = this;   
 
-        app.charges.forEach(element => {          
-          if (element.id === id) {            
-            app.chargeAModifier = element;                        
+        app.charges.forEach(element => {   
+          if (element.id === id) {
+            app.chargeAModifier = element;
+            // date
+            let date = new Date(element.createdAt);
+            app.chargeAModifier.createdAt = app.GetFormattedDate(date);                           
           }
         });
         
-        if (app.chargeAModifier) {     
+        if (app.chargeAModifier) {               
           EventBus.$emit('charge-a-modifier', app.chargeAModifier);          
         }
       }
@@ -91,5 +84,11 @@
   }
   .modal-body {
     background-color: #18bc9c;
+  }
+  .montantVignette {
+    position: absolute;
+    bottom: 0;
+    right: 10px;
+    border-radius: 12px;
   }
 </style>

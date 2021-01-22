@@ -1,14 +1,23 @@
 <template>  
-  <div>
-    <div class="text-center mb-2" style="text-align: center !important">
-      <i class="fa fa-pencil-square"></i>  Charge
-    </div>   
+  <div class="row">
+    <b-modal ref="modal" id="edit-charge" v-show="showModal" hide-footer hide-header>      
+      <div class="d-block text-center bg-success">
 
-    <input type="date" class="form-control form-control-sm text-primary mb-1" v-model="charge.date" placeholder="Date de la charge" />
-    <input type="text" class="form-control form-control-sm text-primary mb-1" v-model="charge.libelle" placeholder="Titre" />    
-    <input type="number" class="form-control form-control-sm text-primary mb-1" v-model="charge.montant"  placeholder="Montant en €" />     
+        <div class="row pull-right" style="margin-top: -20px; margin-right: 0">
+          <span style="font-size: 2em;" @click.prevent="hideModal()">&times;</span>
+        </div>
 
-    <b-button class="btn btn-xs bg-primary" style="height: 50px; padding-top: 5px" block @click="$bvModal.hide('bv-modal-example')"><i class="fa fa-save"></i> Enregistrer</b-button>
+        <div class="pull-left">
+          <i class="fa fa-pencil-square "></i> Mise à jour                                  
+        </div>
+
+        <input type="date" class="form-control form-control-sm text-primary mb-1" v-model="charge.createdAt" value="" />
+        <input type="text" class="form-control form-control-sm text-primary mb-1" v-model="charge.libelle" value="" placeholder="Titre" />    
+        <input type="number" class="form-control form-control-sm text-primary mb-1" v-model="charge.montant" value="" placeholder="Montant en €" />     
+
+        <b-button class="btn btn-xs bg-primary" id="btnSaverCharge" style="height: 50px; padding-top: 5px" block @click.prevent="showModal = false"><i class="fa fa-save"></i> Enregistrer</b-button>
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -19,10 +28,16 @@
   import { EventBus } from '../../event-bus.js';
 
   export default {
-    name: 'ChargesList',
+    name: 'ChargesEdit',
     data() {
       return {
-        charge: {}
+        charge: {
+          id: 0,          
+          date: '',
+          libelle: '',
+          montant: 0
+        },
+        showModal: false
       };
     },
     components: {
@@ -32,22 +47,33 @@
       let app = this;      
       app.charge = {
         id: 0,          
-        date: '',
+        createdAt: '',
         libelle: '',
         montant: 0
       }; 
-
-      EventBus.$off('charge-a-modifier');
-      EventBus.$on('charge-a-modifier', chargeAModifier => {
+      
+      EventBus.$on('charge-a-modifier', chargeAModifier => {                
         app.charge = chargeAModifier;
-        console.warn(chargeAModifier);
+        app.showModal = true;
       });                 
     },
     mounted() {
       let app = this;                        
+    },
+    beforeCreate() {
+      let app = this;
+      EventBus.$off('charge-a-modifier');           
     },    
+    beforeDestroy() {
+      let app = this;
+      app.showModal = false;
+      EventBus.$off('charge-a-modifier');
+    },
     methods: {
-      
+      hideModal() {
+        let app = this;
+        app.$refs.modal.hide();
+      }
     }
   };
 </script>
