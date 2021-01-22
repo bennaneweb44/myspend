@@ -1,12 +1,14 @@
 <template>
   <div>
-    <Charges></Charges>
+    <ChargesList></ChargesList>
+    <ChargesEdit class="d-none"></ChargesEdit>
   </div>
 </template>
 
 <script>
 
-import Charges from './Charges.vue'
+import ChargesList from './Charges/ChargesList.vue'
+import ChargesEdit from './Charges/ChargesEdit.vue'
 
 export default {
   name: 'app',
@@ -16,7 +18,8 @@ export default {
     };
   },
   components: {
-    Charges
+    ChargesList,
+    ChargesEdit
   }
 };
 </script>
