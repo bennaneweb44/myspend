@@ -1,16 +1,23 @@
 <template>  
   <div class="row">    
-    <div v-for="charge in charges" :key="charge.id" class="card col-12 col-md-4 p-2" style="border: none; background-color: transparent">
-        <div class="card-body bg-success" style="border: 3px solid #000; border-radius: 12px; padding-top: 15px; padding-left: 15px">          
+    <div class="col-md-12 text-center" style="margin: -25px 0 40px 0">
+      <span style="margin-right: 10px"><u style="font-weight: bold">Total</u> : </span> <label href="#" class="btn-warning pl-1 pr-1" style="border: 1px solid #000; border-radius: 12px; color: #000 ">{{ total.toFixed(2).toString().replace(".", ",") }} €</label>   
+      <div class="pull-right">
+        <i class="fa fa-plus-circle" style="font-size: larger"></i>  
+      </div>      
+    </div>
+    
+    <div v-for="charge in charges" :key="charge.id" class="card col-lg-4 col-sm-6" style="border: none; background-color: transparent; padding: 5px 10px 30px 25px ">
+        <div class="card-body bg-success" style="border: 3px solid #000; border-radius: 12px; padding-top: 15px; padding-left: 15px;">          
             <h5 class="card-title">              
               <i class="fa fa-calendar"></i> {{ charge.createdAt | moment("DD/MM/YYYY") }}                   
               <b-button v-b-modal.edit-charge class="fa fa-pencil-square-o pull-right p-1 text-primary" 
-                style="background-color: transparent; border: none; margin-top: -5px; margin-right: -35px"
+                style="background-color: transparent; border: none; margin-top: -5px; margin-right: -35px; font-size: larger"
                 @click.prevent="showModalEdit(charge.id)" 
                 title="Modifer"></b-button>
             </h5>            
             <p class="card-text">{{ charge.libelle }}</p>            
-            <label href="#" class="btn-primary pl-1 pr-1 montantVignette" style="margin-right: 13px; margin-bottom: 22px" >{{ charge.montant }} €</label>            
+            <label href="#" class="btn-primary pl-1 pr-1 montantVignette" style="margin-right: 13px; margin-bottom: 42px" >{{ charge.montant.toFixed(2).toString().replace(".", ",") }} €</label>            
         </div>
     </div>    
     <ChargesEdit></ChargesEdit>    
@@ -34,7 +41,8 @@
           createdAt: '',
           libelle: '',
           montant: 0
-        }        
+        },
+        total: 0        
       };
     },
     components: {
@@ -47,6 +55,11 @@
       Axios.get('api/charges').then(function (resp) {
           // Valorisation de l'objet courant
           app.charges = resp.data; 
+
+          // total
+          app.charges.forEach(element => {
+              app.total += element.montant;
+          });
       }).catch(function (err) {
           alert("Impossible de charger les charges. ");
       });
