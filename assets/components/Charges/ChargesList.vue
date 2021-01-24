@@ -17,7 +17,7 @@
                 title="Modifer"></b-button>
             </h5>            
             <p class="card-text">{{ charge.libelle }}</p>            
-            <label href="#" class="btn-primary pl-1 pr-1 montantVignette" style="margin-right: 13px; margin-bottom: 42px" >{{ charge.montant.toString().replace(".", ",") }} €</label>            
+            <label href="#" class="btn-primary pl-1 pr-1 montantVignette" style="margin-right: 13px; margin-bottom: 42px" >{{ parseFloat(charge.montant).toFixed(2).toString().replace(".", ",") }} €</label>            
         </div>
     </div>    
     <ChargesEdit ref='charges_edit' :totalChild.sync="total"></ChargesEdit>    

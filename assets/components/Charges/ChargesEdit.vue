@@ -94,7 +94,7 @@
             // Transfert charge vers "ChargesList"
             if (resp.data.message == 'save_charge_ok') {      
               let newTotal = parseFloat(app.totalChild) + parseFloat(app.charge.montant);    
-              app.$emit('update:totalChild', newTotal);  
+              app.$emit('update:totalChild', newTotal.toFixed(2));  
             }
 
           }).catch(function (err) {
