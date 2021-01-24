@@ -37,8 +37,7 @@
           libelle: '',
           montant: 0
         },
-        showModal: false,
-        totalChild: 0
+        showModal: false
       };
     },
     components: {
@@ -47,14 +46,9 @@
     created() {
       let app = this;      
       
-      EventBus.$on('charge-a-modifier', chargeAModifier => {                
+      EventBus.$on('charge-a-modifier', chargeAModifier => {                        
         app.charge = chargeAModifier;
-        app.showModal = true;
-      });     
-      
-      EventBus.$on('total-charges', totalCharges => {                
-        app.totalChild = totalCharges - app.charge.montant;
-      });                 
+      });         
     },
     mounted() {
       let app = this;                        
@@ -62,13 +56,11 @@
     beforeCreate() {
       let app = this;
       EventBus.$off('charge-a-modifier');  
-      EventBus.$off('total-charges');             
     },    
     beforeDestroy() {
       let app = this;
       app.showModal = false;
-      EventBus.$off('charge-a-modifier');  
-      EventBus.$off('total-charges');             
+      EventBus.$off('charge-a-modifier');         
     },
     methods: {
       hideModal() {
@@ -90,11 +82,9 @@
           }
 
           Axios.put('api/charges/update/'+id, chargeObject, app.GetHeaders()).then(function (resp) {
-
             // Transfert charge vers "ChargesList"
-            if (resp.data.message == 'save_charge_ok') {      
-              let newTotal = parseFloat(app.totalChild) + parseFloat(app.charge.montant);    
-              app.$emit('update:totalChild', newTotal.toFixed(2));  
+            if (resp.data.message == 'save_charge_ok') {
+              app.$emit('charge-modifiee');
             }
 
           }).catch(function (err) {

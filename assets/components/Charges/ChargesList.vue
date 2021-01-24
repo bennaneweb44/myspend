@@ -2,12 +2,15 @@
   <div class="row">    
     <div class="col-md-12 text-center" style="font-weight: bold; margin: -25px 0 40px 0">
       <span style="margin-right: 10px"><u>Total</u> : </span> <label href="#"  class="btn-warning pl-1 pr-1" style="border: 1px solid #000; border-radius: 12px; color: #000 ">{{ total.toString().replace(".", ",") }} €</label>   
-      <div class="pull-right">
-        <i class="fa fa-plus-circle" style="font-size: larger"></i>  
+      <div class="pull-right">        
+        <b-button v-b-modal.create-charge class="fa fa-plus-circle pull-right p-1" 
+                style="background-color: transparent; color: #000; border: none; font-size: 1.5em; cursor: pointer"                
+                title="Nouvelle charge"></b-button>
       </div>      
     </div>
     
     <div v-for="charge in charges" :key="charge.id" class="card col-lg-4 col-sm-6" style="border: none; background-color: transparent; padding: 5px 10px 30px 25px ">
+        <!-- background-color: #BAADCD !important; -->
         <div class="card-body bg-success" style="border: 3px solid #000; border-radius: 12px; padding-top: 15px; padding-left: 15px;">          
             <h5 class="card-title">              
               <i class="fa fa-calendar"></i> {{ charge.updatedAt | moment("DD/MM/YYYY") }}                   
@@ -20,7 +23,8 @@
             <label href="#" class="btn-primary pl-1 pr-1 montantVignette" style="margin-right: 13px; margin-bottom: 42px" >{{ parseFloat(charge.montant).toFixed(2).toString().replace(".", ",") }} €</label>            
         </div>
     </div>    
-    <ChargesEdit ref='charges_edit' :totalChild.sync="total"></ChargesEdit>    
+    <ChargesCreate @charge-ajoutee="getChargesList"></ChargesCreate>
+    <ChargesEdit @charge-modifiee="getChargesList"></ChargesEdit>          
   </div>
 </template>
 
@@ -29,7 +33,10 @@
   // Imports
   import Axios from 'axios'
   import { EventBus } from '../../event-bus.js'
-  import ChargesEdit from './ChargesEdit.vue'  
+
+  // Components
+  import ChargesEdit from './ChargesEdit.vue'
+  import ChargesCreate from './ChargesCreate.vue'
 
   export default {
     name: 'ChargesList',
@@ -42,26 +49,23 @@
           libelle: '',
           montant: 0
         },
+        chargeNouvelle: {
+          id: 0,          
+          createdAt: '',
+          libelle: '',
+          montant: 0
+        },
         total: 0        
       };
     },
     components: {
       Axios,
-      ChargesEdit
+      ChargesEdit,
+      ChargesCreate
     },
     created() {
-      let app = this;                      
-
-      Axios.get('api/charges/list').then(function (resp) {
-          // Valorisation de l'objet courant
-          app.charges = resp.data; 
-
-          // total
-          app.calculTotal();
-
-      }).catch(function (err) {
-          alert("Impossible de charger les charges. ");
-      });
+      let app = this;       
+      app.getChargesList();                      
     },
     mounted() {
       let app = this;         
@@ -80,17 +84,27 @@
         });
         
         if (app.chargeAModifier) {                      
-          EventBus.$emit('charge-a-modifier', app.chargeAModifier);          
-          EventBus.$emit('total-charges', app.total);          
+          EventBus.$emit('charge-a-modifier', app.chargeAModifier);                
         }
-      },
-      calculTotal() {
+      },      
+      getChargesList() {
         let app = this;
-        
+
+        Axios.get('api/charges/list').then(function (resp) {
+          // Valorisation
+          app.charges = resp.data; 
+          // total
+          app.SetTotalCharges();      
+      }).catch(function (err) {
+          alert("Impossible de charger les charges. ");
+      });
+      },
+      SetTotalCharges() {
+        let app = this;        
+        app.total = 0;
         app.charges.forEach(element => {
               app.total += element.montant;
         });
-
         app.total = app.total.toFixed(2);
       }
     }

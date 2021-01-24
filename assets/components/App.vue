@@ -7,6 +7,7 @@
 <script>
 
 import Vue from 'vue'
+import Axios from 'axios'
 import ChargesList from './Charges/ChargesList.vue'
 
 // Global methos
@@ -16,7 +17,7 @@ Vue.mixin({
       let month = date . getMonth() +1;
       let day = date . getDate();
       let year = date . getFullYear();
-      
+
       return year + '-' + (month < 10 ? '0' + month : month) + '-' + (day < 10 ? '0' + day : day);
     },
     GetHeaders() {
