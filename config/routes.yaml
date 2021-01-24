@@ -1,4 +1,49 @@
+################################ Charges ################################
 api_charges_list:
-  path: /api/charges
+  path: /api/charges/list
   controller: App\Controller\Api\ApiChargesController::index
   format: json
+  methods: GET
+
+api_charges_create:
+  path: /api/charges/create
+  controller: App\Controller\Api\ApiChargesController::create
+  format: json
+  methods: POST
+
+api_charges_edit:
+  path: /api/charges/update/{id}
+  controller: App\Controller\Api\ApiChargesController::update
+  format: json
+  methods: PUT
+
+api_charges_delete:
+  path: /api/charges/delete/{id}
+  controller: App\Controller\Api\ApiChargesController::delete
+  format: json
+  methods: DELETE
+
+############################# Alimentation #############################
+api_alimentation_list:
+  path: /api/alimentation/list
+  controller: App\Controller\Api\ApiAlimentationController::index
+  format: json
+  methods: GET
+
+api_alimentation_create:
+  path: /api/alimentation/create
+  controller: App\Controller\Api\ApiAlimentationController::create
+  format: json
+  methods: POST
+
+api_alimentation_edit:
+  path: /api/alimentation/update/{id}
+  controller: App\Controller\Api\ApiAlimentationController::update
+  format: json
+  methods: PUT
+
+api_alimentation_delete:
+  path: /api/alimentation/delete/{id}
+  controller: App\Controller\Api\ApiAlimentationController::delete
+  format: json
+  methods: DELETE

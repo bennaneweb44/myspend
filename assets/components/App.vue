@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ChargesList></ChargesList>
+    <ChargesList ref="charges_list"></ChargesList>
   </div>
 </template>
 
@@ -13,10 +13,19 @@ import ChargesList from './Charges/ChargesList.vue'
 Vue.mixin({
   methods: {
     GetFormattedDate(date) {        
-      var month = date . getMonth() +1;
-      var day = date . getDate();
-      var year = date . getFullYear();
-      return year + '-' + (month < 10 ? '0' + month : month) + '-' + day;
+      let month = date . getMonth() +1;
+      let day = date . getDate();
+      let year = date . getFullYear();
+      
+      return year + '-' + (month < 10 ? '0' + month : month) + '-' + (day < 10 ? '0' + day : day);
+    },
+    GetHeaders() {
+      let options = {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }      
+      return options;
     }
   },
 })

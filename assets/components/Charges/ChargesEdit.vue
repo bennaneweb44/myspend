@@ -11,11 +11,11 @@
           <i class="fa fa-pencil-square "></i> Mise à jour                                  
         </div>
 
-        <input type="date" class="form-control form-control-sm text-primary mb-1" v-model="charge.createdAt" value="" />
+        <input type="date" class="form-control form-control-sm text-primary mb-1" v-model="charge.updatedAt" value="" />
         <input type="text" class="form-control form-control-sm text-primary mb-1" v-model="charge.libelle" value="" placeholder="Titre" />    
         <input type="number" class="form-control form-control-sm text-primary mb-1" v-model="charge.montant" value="" placeholder="Montant en €" />     
 
-        <b-button class="btn btn-xs bg-primary" id="btnSaverCharge" style="height: 50px; padding-top: 5px" block @click.prevent="showModal = false"><i class="fa fa-save"></i> Enregistrer</b-button>
+        <b-button @click.prevent="updateCharge(charge.id)" class="btn btn-xs bg-primary" id="btnSaverCharge" style="height: 50px; padding-top: 5px" block><i class="fa fa-save"></i> Enregistrer</b-button>
       </div>
     </b-modal>
   </div>
@@ -33,11 +33,12 @@
       return {
         charge: {
           id: 0,          
-          date: '',
+          updatedAt: '',
           libelle: '',
           montant: 0
         },
-        showModal: false
+        showModal: false,
+        totalChild: 0
       };
     },
     components: {
@@ -45,16 +46,14 @@
     },
     created() {
       let app = this;      
-      app.charge = {
-        id: 0,          
-        createdAt: '',
-        libelle: '',
-        montant: 0
-      }; 
       
       EventBus.$on('charge-a-modifier', chargeAModifier => {                
         app.charge = chargeAModifier;
         app.showModal = true;
+      });     
+      
+      EventBus.$on('total-charges', totalCharges => {                
+        app.totalChild = totalCharges - app.charge.montant;
       });                 
     },
     mounted() {
@@ -62,17 +61,48 @@
     },
     beforeCreate() {
       let app = this;
-      EventBus.$off('charge-a-modifier');           
+      EventBus.$off('charge-a-modifier');  
+      EventBus.$off('total-charges');             
     },    
     beforeDestroy() {
       let app = this;
       app.showModal = false;
-      EventBus.$off('charge-a-modifier');
+      EventBus.$off('charge-a-modifier');  
+      EventBus.$off('total-charges');             
     },
     methods: {
       hideModal() {
         let app = this;
         app.$refs.modal.hide();
+      },
+      updateCharge(id) {
+        let app = this;
+
+        if (!isNaN(id)) {
+
+          // montant : 2 chiffres après la virgule
+          let montantString = app.charge.montant.toString().replace(',', '.');
+          app.charge.montant = parseFloat(montantString).toFixed(2);
+
+          // Object for "backend"
+          let chargeObject = {
+            'charge' : app.charge
+          }
+
+          Axios.put('api/charges/update/'+id, chargeObject, app.GetHeaders()).then(function (resp) {
+
+            // Transfert charge vers "ChargesList"
+            if (resp.data.message == 'save_charge_ok') {      
+              let newTotal = parseFloat(app.totalChild) + parseFloat(app.charge.montant);    
+              app.$emit('update:totalChild', newTotal);  
+            }
+
+          }).catch(function (err) {
+              alert("Impossible de mettre à jour la charge. ");
+          });
+
+          app.hideModal();
+        }
       }
     }
   };
