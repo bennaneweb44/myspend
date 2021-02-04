@@ -34,6 +34,7 @@ class Charges
 
     /**
      * @ORM\ManyToOne(targetEntity=CategorieCharge::class, inversedBy="charges")     
+     * @Groups("charge:read")
      */
     private $categorie;
 

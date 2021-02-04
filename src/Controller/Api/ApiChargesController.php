@@ -31,10 +31,18 @@ class ApiChargesController extends AbstractController
         $month = date('m');        
 
         // Get all items of this mounth        
-        $charges = $this->chargesRepository->getAllByMonth($month);        
+        $chargesMensuelles = $this->chargesRepository->getAllByMonth($month);        
+
+        // Get all <Charges fixes>
+        $categorie = $this->categorieChargeRepository->findOneBy(['id' => 1]);                
+        $chargesFixes = $this->chargesRepository->getAllChargesFixes($categorie);
 
         // Json
-        $chargesNormalises = $this->normalizerInterface->normalize($charges, 'json', ['groups' => 'charge:read']);        
+        $chargesNormalises = $this->normalizerInterface->normalize(
+            array_merge($chargesMensuelles, $chargesFixes), 
+            'json', 
+            ['groups' => ['charge:read', 'CategorieCharge:read']]
+        );
 
         // Json response
         $response = new JsonResponse(json_encode($chargesNormalises), 200, [], true);

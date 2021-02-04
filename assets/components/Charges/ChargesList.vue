@@ -11,7 +11,7 @@
     
     <div v-for="charge in charges" :key="charge.id" class="card col-lg-4 col-sm-6" style="border: none; background-color: transparent; padding: 5px 10px 30px 25px ">
         <!-- background-color: #BAADCD !important; -->
-        <div class="card-body bg-success" style="border: 3px solid #000; border-radius: 12px; padding-top: 15px; padding-left: 15px;">          
+        <div class="card-body bg-success" v-bind:class="{ chargeFixe: charge.categorie.id == 1 }" style="border: 3px solid #000; border-radius: 12px; padding-top: 15px; padding-left: 15px;">          
             <h5 class="card-title">              
               <i class="fa fa-calendar"></i> {{ charge.updatedAt | moment("DD/MM/YYYY") }}                   
               <b-button v-b-modal.edit-charge class="fa fa-pencil-square-o pull-right p-1 text-primary" 
@@ -93,11 +93,12 @@
         Axios.get('api/charges/list').then(function (resp) {
           // Valorisation
           app.charges = resp.data; 
+          console.log(app.charges);
           // total
           app.SetTotalCharges();      
-      }).catch(function (err) {
-          alert("Impossible de charger les charges. ");
-      });
+        }).catch(function (err) {
+            alert("Impossible de charger la liste des charges.");
+        });
       },
       SetTotalCharges() {
         let app = this;        
@@ -126,5 +127,9 @@
     bottom: 0;
     right: 10px;
     border-radius: 12px;
+  }
+
+  .chargeFixe {
+    background-color: #19cc98 !important;
   }
 </style>

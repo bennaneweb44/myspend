@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\CategorieCharge;
 use App\Entity\Charges;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -68,6 +69,18 @@ class ChargesRepository extends ServiceEntityRepository
             ->andWhere("c.createdAt <= ?2")
             ->setParameter(1, new \DateTime($debut))
             ->setParameter(2, new \DateTime($fin))
+            ->orderBy('c.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function getAllChargesFixes(CategorieCharge $categorie)
+    {
+        return $this->createQueryBuilder('c')
+            ->select()
+            ->where("c.categorie = :categorie")
+            ->setParameter('categorie', $categorie)
             ->orderBy('c.createdAt', 'DESC')
             ->getQuery()
             ->getResult()
