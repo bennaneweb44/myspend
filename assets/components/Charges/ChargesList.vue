@@ -30,9 +30,16 @@
 
 <script>
 
+  import Vue from 'vue'
+
   // Imports
   import Axios from 'axios'
   import { EventBus } from '../../event-bus.js'
+
+  // Long click for mobile
+  import { longClickDirective } from 'vue-long-click'
+  const longClickInstance = longClickDirective({delay: 400, interval: 50})
+  Vue.directive('longclick', longClickInstance)
 
   // Components
   import ChargesEdit from './ChargesEdit.vue'
