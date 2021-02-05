@@ -49,7 +49,7 @@ class ChargesRepository extends ServiceEntityRepository
     }
     */
 
-    public function getAllByMonth($month, $year = null) 
+    public function getAllVariablesByMonth(CategorieCharge $categorie, $month, $year = null) 
     {    
         if (!$year) {
             $year = date('y');
@@ -67,8 +67,10 @@ class ChargesRepository extends ServiceEntityRepository
             ->select()
             ->where("c.createdAt >= ?1")
             ->andWhere("c.createdAt <= ?2")
+            ->andWhere("c.categorie = :categorie")            
             ->setParameter(1, new \DateTime($debut))
             ->setParameter(2, new \DateTime($fin))
+            ->setParameter('categorie', $categorie)
             ->orderBy('c.createdAt', 'DESC')
             ->getQuery()
             ->getResult()

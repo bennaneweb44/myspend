@@ -5,6 +5,12 @@ api_charges_list:
   format: json
   methods: GET
 
+api_charges_list_date:
+  path: /api/charges/list/annee/{annee}/mois/{mois}
+  controller: App\Controller\Api\ApiChargesController::listByDate
+  format: json
+  methods: GET
+
 api_charges_create:
   path: /api/charges/create
   controller: App\Controller\Api\ApiChargesController::create

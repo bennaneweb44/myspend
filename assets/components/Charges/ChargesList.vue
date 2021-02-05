@@ -2,20 +2,27 @@
   <div class="row">    
     <div class="col-md-12 text-center" style="font-weight: bold; margin: -25px 0 40px 0">
       <span style="margin-right: 10px"><u>Total</u> : </span> <label href="#"  class="btn-warning pl-1 pr-1" style="border: 1px solid #000; border-radius: 12px; color: #000 ">{{ total.toString().replace(".", ",") }} €</label>   
-      <div class="pull-right">        
-        <b-button v-b-modal.create-charge class="fa fa-plus-circle pull-right p-1" 
-                style="background-color: transparent; color: #000; border: none; font-size: 1.5em; cursor: pointer"                
-                title="Nouvelle charge"></b-button>
+      <div class="pull-left">
+        <b-button v-b-modal.filter-charges 
+          class="fa fa-filter pull-left p-1 btnCreate" 
+          title="Filtrer par date">          
+        </b-button>
+        <input type="text" disabled class="disabled" style="background-color: transparent; border: none; font-weight: bold; font-family: inherit;" v-model="currentDateFilter" />
+          
+      </div>      
+      <div class="pull-right">              
+        <b-button v-b-modal.create-charge 
+          class="fa fa-plus-circle pull-right p-1 btnCreate" 
+          title="Nouvelle charge"></b-button>
       </div>      
     </div>
     
     <div v-for="charge in charges" :key="charge.id" class="card col-lg-4 col-sm-6" style="border: none; background-color: transparent; padding: 5px 10px 30px 25px ">
         <!-- background-color: #BAADCD !important; -->
-        <div class="card-body bg-success" v-longclick="() => showModalEdit(charge.id)" v-bind:class="{ chargeFixe: charge.categorie.id == 1 }" style="border: 3px solid #000; border-radius: 12px; padding-top: 15px; padding-left: 15px;">          
-            <h5 class="card-title">              
-              <i class="fa fa-calendar"></i> {{ charge.updatedAt | moment("DD/MM/YYYY") }}                   
-              <b-button v-b-modal.edit-charge class="fa fa-pencil-square-o pull-right p-1 text-primary" 
-                style="background-color: transparent; border: none; margin-top: -5px; margin-right: -35px; font-size: larger"
+        <div class="card-body bg-success" v-bind:class="{ chargeFixe: charge.categorie.id == 1 }" style="border: 3px solid #000; border-radius: 12px; padding-top: 15px; padding-left: 15px;">          
+            <h5 class="card-title" style="font-size: 1.5em;">              
+              <i class="fa fa-calendar"></i> {{ charge.updatedAt | moment("DD/MM/YYYY") }}
+              <b-button v-b-modal.edit-charge class="fa fa-pencil-square-o pull-right p-1 text-primary btnEdit"                
                 @click.prevent="showModalEdit(charge.id)" 
                 title="Modifer"></b-button>
             </h5>            
@@ -23,27 +30,24 @@
             <label href="#" class="btn-primary pl-1 pr-1 montantVignette" style="margin-right: 13px; margin-bottom: 42px" >{{ parseFloat(charge.montant).toFixed(2).toString().replace(".", ",") }} €</label>            
         </div>
     </div>    
+
     <ChargesCreate @charge-ajoutee="getChargesList"></ChargesCreate>
-    <ChargesEdit @charge-modifiee="getChargesList"></ChargesEdit>          
+    <ChargesEdit @charge-modifiee="getChargesList"></ChargesEdit>
+    <FilterCharges @charges-filtrees="getChargesFilteredList"></FilterCharges>          
+    
   </div>
 </template>
 
 <script>
 
-  import Vue from 'vue'
-
   // Imports
   import Axios from 'axios'
   import { EventBus } from '../../event-bus.js'
 
-  // Long click for mobile
-  import { longClickDirective } from 'vue-long-click'
-  const longClickInstance = longClickDirective({delay: 400, interval: 50})
-  Vue.directive('longclick', longClickInstance)
-
   // Components
   import ChargesEdit from './ChargesEdit.vue'
   import ChargesCreate from './ChargesCreate.vue'
+  import FilterCharges from './FilterCharges.vue'
 
   export default {
     name: 'ChargesList',
@@ -62,20 +66,25 @@
           libelle: '',
           montant: 0
         },
+        currentDateFilter: '',
         total: 0        
       };
     },
     components: {
       Axios,
       ChargesEdit,
-      ChargesCreate
+      ChargesCreate,
+      FilterCharges
     },
     created() {
       let app = this;       
       app.getChargesList();                      
+      if (sessionStorage.getItem('currentDateAffichage')) {
+        app.currentDateFilter = sessionStorage.getItem('currentDateAffichage');
+      }
     },
     mounted() {
-      let app = this;         
+      let app = this;            
     },    
     methods: {
       showModalEdit(id) {
@@ -100,12 +109,34 @@
         Axios.get('api/charges/list').then(function (resp) {
           // Valorisation
           app.charges = resp.data; 
-          console.log(app.charges);
           // total
-          app.SetTotalCharges();      
+          app.SetTotalCharges();                
         }).catch(function (err) {
             alert("Impossible de charger la liste des charges.");
         });
+      },
+      getChargesFilteredList() {
+        let app = this;
+
+        if (sessionStorage.getItem('filter-mois-charges') && sessionStorage.getItem('filter-annee-charges') ) {
+        
+          let mois = sessionStorage.getItem('filter-mois-charges');
+          let annee = sessionStorage.getItem('filter-annee-charges');
+
+          // valoriser label du filtre en cours
+          let dateAffichage = mois + '/' + annee[2] + annee[3];
+          app.currentDateFilter = dateAffichage;
+          sessionStorage.setItem('currentDateAffichage', dateAffichage);
+
+          Axios.get('api/charges/list/annee/' + annee + '/mois/' + mois).then(function (resp) {
+            // Valorisation
+            app.charges = resp.data;             
+            // total
+            app.SetTotalCharges();                
+          }).catch(function (err) {
+              alert("Impossible de charger la liste des charges.");
+          });
+        }
       },
       SetTotalCharges() {
         let app = this;        
@@ -139,4 +170,22 @@
   .chargeFixe {
     background-color: #19cc98 !important;
   }
+
+  .btnEdit, .btnEdit:hover, .btnEdit:active, .btnEdit:enabled {
+    background-color: transparent; 
+    border: none; 
+    margin-top: -5px;
+    margin-right: -35px;
+    font-size: 1.7em;
+  }
+
+  .btnCreate, .btnCreate:hover, .btnCreate:active, .btnCreate:enabled {
+    background-color: transparent; 
+    color: #000; 
+    border: none; 
+    font-size: 1.5em; 
+    cursor: pointer;
+    border: none !important;
+  }
+  
 </style>

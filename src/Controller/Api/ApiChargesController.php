@@ -31,15 +31,49 @@ class ApiChargesController extends AbstractController
         $month = date('m');        
 
         // Get all items of this mounth        
-        $chargesMensuelles = $this->chargesRepository->getAllByMonth($month);        
+        $categorieVariables = $this->categorieChargeRepository->findOneBy(['id' => 2]);
+        $chargesMensuelles = $this->chargesRepository->getAllVariablesByMonth($categorieVariables, $month, null);        
 
         // Get all <Charges fixes>
-        $categorie = $this->categorieChargeRepository->findOneBy(['id' => 1]);                
-        $chargesFixes = $this->chargesRepository->getAllChargesFixes($categorie);
+        $categorieFixes = $this->categorieChargeRepository->findOneBy(['id' => 1]);                
+        $chargesFixes = $this->chargesRepository->getAllChargesFixes($categorieFixes);
 
         // Json
+        $union = array_merge($chargesMensuelles, $chargesFixes);
         $chargesNormalises = $this->normalizerInterface->normalize(
-            array_merge($chargesMensuelles, $chargesFixes), 
+            $union, 
+            'json', 
+            ['groups' => ['charge:read', 'CategorieCharge:read']]
+        );
+
+        // Json response
+        $response = new JsonResponse(json_encode($chargesNormalises), 200, [], true);
+        
+        return $response;
+    }
+
+    public function listByDate($annee, $mois) : JsonResponse
+    {
+        // Get all items of this mounth        
+        $categorieVariables = $this->categorieChargeRepository->findOneBy(['id' => 2]);
+        $chargesMensuelles = $this->chargesRepository->getAllVariablesByMonth($categorieVariables, $mois, $annee);
+
+        // Get all <Charges fixes>
+        $categorieFixes = $this->categorieChargeRepository->findOneBy(['id' => 1]);
+        $chargesFixes = $this->chargesRepository->getAllChargesFixes($categorieFixes);
+
+        // Json
+        $union = array_merge($chargesMensuelles, $chargesFixes);
+
+        /*foreach($union as $key => $value) {
+            if ($value instanceof Charges && in_array($value, $chargesMensuelles) && in_array($value, $chargesFixes)) {
+                unset($union[$key]);
+            }
+        }
+        dd(count($union));*/
+
+        $chargesNormalises = $this->normalizerInterface->normalize(
+            $union, 
             'json', 
             ['groups' => ['charge:read', 'CategorieCharge:read']]
         );
