@@ -1,10 +1,10 @@
 <template>  
   <div class="row">
-    <b-modal ref="modal" id="filter-charges" v-show="showModal" hide-footer hide-header>      
+    <b-modal ref="modalFilters" id="filter-charges" v-show="showModal" hide-footer hide-header>      
       <div class="d-block text-center bg-success">
 
-        <div class="row pull-right" style="margin-top: -20px; margin-right: 0">
-          <span style="font-size: 2em; cursor: pointer" @click.prevent="hideModal()">&times;</span>
+        <div class="row pull-right">
+          <span style="font-size: 2em; cursor: pointer; margin-top: -20px; " @click.prevent="hideModal()">&times;</span>
         </div>
 
         <div class="col-md-12 text-left">
@@ -154,14 +154,14 @@
     methods: {
       hideModal() {
         let app = this;
-        app.$refs.modal.hide();
+        app.$refs.modalFilters.hide();
       },
       applyDateFilter() {
         let app = this;        
 
         // stockage en local
-        sessionStorage.setItem('filter-mois-charges', app.selectedMois);
-        sessionStorage.setItem('filter-annee-charges', app.selectedAnnee);        
+        localStorage.setItem('filter-mois-charges', app.selectedMois);
+        localStorage.setItem('filter-annee-charges', app.selectedAnnee);        
         
         // Event for filtered listing
         app.$emit('charges-filtrees');

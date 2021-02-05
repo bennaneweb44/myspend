@@ -1,23 +1,31 @@
 <template>  
-  <div class="row">    
-    <div class="col-md-12 text-center" style="font-weight: bold; margin: -25px 0 40px 0">
-      <span style="margin-right: 10px"><u>Total</u> : </span> <label href="#"  class="btn-warning pl-1 pr-1" style="border: 1px solid #000; border-radius: 12px; color: #000 ">{{ total.toString().replace(".", ",") }} €</label>   
-      <div class="pull-left">
+  <div class="row"> 
+    
+    <div class="row col-md-12 mb-5">
+
+      <div class="col-md-4 col-sm-4 col-2 text-left">
         <b-button v-b-modal.filter-charges 
-          class="fa fa-filter pull-left p-1 btnCreate" 
-          title="Filtrer par date">          
-        </b-button>
-        <input type="text" disabled class="disabled" style="background-color: transparent; border: none; font-weight: bold; font-family: inherit;" v-model="currentDateFilter" />
-          
-      </div>      
-      <div class="pull-right">              
+          class="fa fa-filter pull-left p-1 btnCreate"
+          style="float: left; width: 70%" 
+          title="Filtrer par date">                    
+          <input type="text" disabled class="disabled" style="background-color: transparent; border: none; font-weight: bold; font-family: inherit;" v-model="currentDateFilter" />
+        </b-button>        
+      </div>
+
+      <div class="col-md-4 col-sm-4 col-8 text-center">
+        <label href="#" class="btn-warning pl-3 pr-3" style="font-weight: bold; border: 2px solid #000; border-radius: 12px; color: #000 ">{{ total.toString().replace(".", ",") }} €</label>                   
+      </div>
+      
+      <div class="col-md-4 col-sm-4 col-2">
         <b-button v-b-modal.create-charge 
           class="fa fa-plus-circle pull-right p-1 btnCreate" 
           title="Nouvelle charge"></b-button>
-      </div>      
+      </div>
+
     </div>
     
-    <div v-for="charge in charges" :key="charge.id" class="card col-lg-4 col-sm-6" style="border: none; background-color: transparent; padding: 5px 10px 30px 25px ">
+    <div class="row" style="padding-bottom: 3em">
+      <div v-for="charge in charges" :key="charge.id" class="card col-lg-4 col-sm-6" style="border: none; background-color: transparent; padding: 5px 10px 30px 25px ">
         <!-- background-color: #BAADCD !important; -->
         <div class="card-body bg-success" v-bind:class="{ chargeFixe: charge.categorie.id == 1 }" style="border: 3px solid #000; border-radius: 12px; padding-top: 15px; padding-left: 15px;">          
             <h5 class="card-title" style="font-size: 1.5em;">              
@@ -29,7 +37,9 @@
             <p class="card-text">{{ charge.libelle }}</p>            
             <label href="#" class="btn-primary pl-1 pr-1 montantVignette" style="margin-right: 13px; margin-bottom: 42px" >{{ parseFloat(charge.montant).toFixed(2).toString().replace(".", ",") }} €</label>            
         </div>
-    </div>    
+      </div> 
+    </div>
+       
 
     <ChargesCreate @charge-ajoutee="getChargesList"></ChargesCreate>
     <ChargesEdit @charge-modifiee="getChargesList"></ChargesEdit>
@@ -78,9 +88,12 @@
     },
     created() {
       let app = this;       
-      app.getChargesList();                      
-      if (sessionStorage.getItem('currentDateAffichage')) {
-        app.currentDateFilter = sessionStorage.getItem('currentDateAffichage');
+                          
+      if (localStorage.getItem('currentDateAffichage')) {
+        app.currentDateFilter = localStorage.getItem('currentDateAffichage');
+        app.getChargesFilteredList();
+      } else {
+        app.getChargesList();  
       }
     },
     mounted() {
@@ -106,27 +119,32 @@
       getChargesList() {
         let app = this;
 
-        Axios.get('api/charges/list').then(function (resp) {
-          // Valorisation
-          app.charges = resp.data; 
-          // total
-          app.SetTotalCharges();                
-        }).catch(function (err) {
-            alert("Impossible de charger la liste des charges.");
-        });
+        if (localStorage.getItem('currentDateAffichage')) {
+          app.currentDateFilter = localStorage.getItem('currentDateAffichage');
+          app.getChargesFilteredList();
+        } else {
+          Axios.get('api/charges/list').then(function (resp) {
+            // Valorisation
+            app.charges = resp.data; 
+            // total
+            app.SetTotalCharges();                
+          }).catch(function (err) {
+              alert("Impossible de charger la liste des charges.");
+          });
+        }        
       },
       getChargesFilteredList() {
         let app = this;
 
-        if (sessionStorage.getItem('filter-mois-charges') && sessionStorage.getItem('filter-annee-charges') ) {
+        if (localStorage.getItem('filter-mois-charges') && localStorage.getItem('filter-annee-charges') ) {
         
-          let mois = sessionStorage.getItem('filter-mois-charges');
-          let annee = sessionStorage.getItem('filter-annee-charges');
+          let mois = localStorage.getItem('filter-mois-charges');
+          let annee = localStorage.getItem('filter-annee-charges');
 
           // valoriser label du filtre en cours
           let dateAffichage = mois + '/' + annee[2] + annee[3];
           app.currentDateFilter = dateAffichage;
-          sessionStorage.setItem('currentDateAffichage', dateAffichage);
+          localStorage.setItem('currentDateAffichage', dateAffichage);
 
           Axios.get('api/charges/list/annee/' + annee + '/mois/' + mois).then(function (resp) {
             // Valorisation

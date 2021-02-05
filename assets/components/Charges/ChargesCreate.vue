@@ -4,11 +4,11 @@
       <div class="d-block text-center bg-success">
 
         <div class="row pull-right" style="margin-top: -20px; margin-right: 0">
-          <span style="font-size: 2em; cursor: pointer" @click.prevent="hideModal()">&times;</span>
+          <span style="font-size: 2em; cursor: pointer" @click.prevent="hideModalFilters()">&times;</span>
         </div>
 
         <div class="pull-left">
-          <i class="fa fa-plus-circle"></i> Création                                  
+          <i class="fa fa-plus-circle"></i> Nouvelle charge                                  
         </div>
 
         <input type="date" class="form-control form-control-sm text-primary mb-1" v-model="chargeNew.createdAt" value="" />
@@ -43,8 +43,9 @@
       Axios
     },
     methods: {
-      hideModal() {
+      hideModalFilters() {
         let app = this;
+        console.log('trying to close modal')
         app.$refs.modal.hide();
       },
       saveCharge() {
