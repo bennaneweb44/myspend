@@ -41,7 +41,7 @@
     </div>       
 
     <ChargesCreate @charge-ajoutee="getChargesList"></ChargesCreate>
-    <ChargesEdit @charge-modifiee="getChargesList"></ChargesEdit>
+    <ChargesEdit @charge-modifiee="getChargesList" @charge-supprimee="getChargesList"></ChargesEdit>
     <FilterCharges @charges-filtrees="getChargesFilteredList"></FilterCharges>          
     
   </div>

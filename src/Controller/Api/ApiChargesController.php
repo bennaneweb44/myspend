@@ -176,4 +176,28 @@ class ApiChargesController extends AbstractController
 
         return $response;
     }
+
+    public function delete($id) 
+    {
+        $entityManager = $this->getDoctrine()->getManager();       
+
+        // Get charge by id
+        $charge = $this->chargesRepository->findOneBy(['id' => $id]);
+        
+        // Suppression
+        if ($charge && $charge instanceof Charges) {
+            $entityManager->remove($charge);
+            $entityManager->flush();
+        } else {
+            // KO
+            throw $this->createNotFoundException('Aucune note trouvée avec cet id : ' . $id);
+        }
+
+        // Deleted
+        $response = new JsonResponse(json_encode([
+            'message' => 'delete_charge_ok'
+        ]), 200, [], true);             
+
+        return $response;
+    }
 }

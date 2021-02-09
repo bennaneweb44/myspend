@@ -8,8 +8,9 @@
         </div>
 
         <div class="pull-left">
-          <i class="fa fa-pencil-square "></i> Mise à jour                                  
-        </div>
+          <i class="fa fa-pencil-square"></i> Mise à jour                          
+        </div>        
+        <b-button @click.prevent="deleteCharge(chargeToEdit.id)" class="btn btn-xs bg-danger text-center" id="btnDeleteCharge" style="height: 50px; padding-top: 5px" block><i class="fa fa-trash"></i> Supprimer</b-button>          
 
         <div class="mt-2 mb-2">
           <input type="date" class="form-control form-control-sm text-primary mb-1" v-model="chargeToEdit.updatedAt" value="" />
@@ -22,7 +23,7 @@
           <label class="custom-control-label" for="categorie">Fixe</label>
         </div>
 
-        <b-button @click.prevent="updateCharge(chargeToEdit.id)" class="btn btn-xs bg-primary" id="btnSaverCharge" style="height: 50px; padding-top: 5px" block><i class="fa fa-save"></i> Enregistrer</b-button>
+        <b-button @click.prevent="updateCharge(chargeToEdit.id)" class="btn btn-xs bg-primary" id="btnSaverCharge" style="height: 50px; padding-top: 5px" block><i class="fa fa-save"></i> Enregistrer</b-button>        
       </div>
     </b-modal>
   </div>
@@ -97,6 +98,24 @@
             // Transfert charge vers "ChargesList"
             if (resp.data.message == 'save_charge_ok') {
               app.$emit('charge-modifiee');
+            }
+
+          }).catch(function (err) {
+              alert("Impossible de mettre à jour la charge. ");
+          });
+
+          app.hideModal();
+        }
+      },
+      deleteCharge(id) {
+        let app = this;
+
+        if (!isNaN(id)) {
+          
+          Axios.delete('api/charges/delete/'+id, app.GetHeaders()).then(function (resp) {
+            // Transfert charge vers "ChargesList"
+            if (resp.data.message == 'delete_charge_ok') {
+              app.$emit('charge-supprimee');
             }
 
           }).catch(function (err) {
