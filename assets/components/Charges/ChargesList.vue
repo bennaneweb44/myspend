@@ -10,7 +10,7 @@
           title="Filtrer par date">                    
           <input type="text" disabled class="disabled" style="background-color: transparent; border: none; font-weight: bold; font-family: inherit;" v-model="currentDateFilter" />          
         </b-button>        
-        <a v-show="currentDateFilter" @click.prevent="deleteDateFilter()" style="margin-left: 7px; font-size: 1.5em; cursor: pointer; color: darkred"><i class="fa fa-close"></i></a>
+        <a v-show="currentDateFilter" @click.prevent="deleteDateFilter()" style="margin-left: 10px; font-size: 1.5em; cursor: pointer; color: darkred"><i class="fa fa-close"></i></a>
       </div>
 
       <div class="col-md-4 col-sm-4 col-8 text-center">
