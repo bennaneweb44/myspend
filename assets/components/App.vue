@@ -50,4 +50,7 @@ export default {
   .center {
     text-align: center;
   }
+  .fa {
+    vertical-align: text-top;
+  }
 </style>
