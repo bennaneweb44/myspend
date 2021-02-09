@@ -67,14 +67,9 @@
           id: 0,          
           updatedAt: '',
           libelle: '',
-          montant: 0
-        },
-        chargeNouvelle: {
-          id: 0,          
-          createdAt: '',
-          libelle: '',
-          montant: 0
-        },
+          montant: 0,
+          categorie: null
+        },        
         currentDateFilter: null,
         total: 0        
       };

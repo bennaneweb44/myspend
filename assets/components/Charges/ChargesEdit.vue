@@ -11,11 +11,18 @@
           <i class="fa fa-pencil-square "></i> Mise à jour                                  
         </div>
 
-        <input type="date" class="form-control form-control-sm text-primary mb-1" v-model="charge.updatedAt" value="" />
-        <input type="text" class="form-control form-control-sm text-primary mb-1" v-model="charge.libelle" value="" placeholder="Titre" />    
-        <input type="number" class="form-control form-control-sm text-primary mb-1" v-model="charge.montant" value="" placeholder="Montant en €" />     
+        <div class="mt-2 mb-2">
+          <input type="date" class="form-control form-control-sm text-primary mb-1" v-model="chargeToEdit.updatedAt" value="" />
+          <input type="text" class="form-control form-control-sm text-primary mb-1" v-model="chargeToEdit.libelle" value="" placeholder="Titre" />    
+          <input type="number" class="form-control form-control-sm text-primary mb-1" v-model="chargeToEdit.montant" value="" placeholder="Montant en €" />     
+        </div>        
 
-        <b-button @click.prevent="updateCharge(charge.id)" class="btn btn-xs bg-primary" id="btnSaverCharge" style="height: 50px; padding-top: 5px" block><i class="fa fa-save"></i> Enregistrer</b-button>
+        <div class="custom-control custom-switch text-left mb-2">
+          <input type="checkbox" v-model="categorieChecked" v-bind:checked="chargeToEdit.categorie.id == 1" class="custom-control-input" id="categorie">
+          <label class="custom-control-label" for="categorie">Fixe</label>
+        </div>
+
+        <b-button @click.prevent="updateCharge(chargeToEdit.id)" class="btn btn-xs bg-primary" id="btnSaverCharge" style="height: 50px; padding-top: 5px" block><i class="fa fa-save"></i> Enregistrer</b-button>
       </div>
     </b-modal>
   </div>
@@ -31,12 +38,14 @@
     name: 'ChargesEdit',
     data() {
       return {
-        charge: {
+        chargeToEdit: {
           id: 0,          
           updatedAt: '',
           libelle: '',
-          montant: 0
+          montant: 0,
+          categorie: false
         },
+        categorieChecked: false,
         showModal: false
       };
     },
@@ -44,14 +53,14 @@
       Axios
     },
     created() {
-      let app = this;      
+      let app = this;       
       
-      EventBus.$on('charge-a-modifier', chargeAModifier => {                        
-        app.charge = chargeAModifier;
+      EventBus.$on('charge-a-modifier', chargeAModifier => {                                
+        app.chargeToEdit = chargeAModifier;
       });         
     },
     mounted() {
-      let app = this;                        
+      let app = this;        
     },
     beforeCreate() {
       let app = this;
@@ -73,12 +82,15 @@
         if (!isNaN(id)) {
 
           // montant : 2 chiffres après la virgule
-          let montantString = app.charge.montant.toString().replace(',', '.');
-          app.charge.montant = parseFloat(montantString).toFixed(2);
+          let montantString = app.chargeToEdit.montant.toString().replace(',', '.');
+          app.chargeToEdit.montant = parseFloat(montantString).toFixed(2);
+
+          // Catégorie
+          app.chargeToEdit.categorie = app.categorieChecked;          
 
           // Object for "backend"
           let chargeObject = {
-            'charge' : app.charge
+            'charge' : app.chargeToEdit
           }
 
           Axios.put('api/charges/update/'+id, chargeObject, app.GetHeaders()).then(function (resp) {
