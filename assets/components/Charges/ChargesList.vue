@@ -6,10 +6,11 @@
       <div class="col-md-4 col-sm-4 col-2 text-left">
         <b-button v-b-modal.filter-charges 
           class="fa fa-filter pull-left p-1 btnCreate"
-          style="float: left; width: 70%" 
+          style="float: left; width: 60%" 
           title="Filtrer par date">                    
-          <input type="text" disabled class="disabled" style="background-color: transparent; border: none; font-weight: bold; font-family: inherit;" v-model="currentDateFilter" />
+          <input type="text" disabled class="disabled" style="background-color: transparent; border: none; font-weight: bold; font-family: inherit;" v-model="currentDateFilter" />          
         </b-button>        
+        <a v-show="currentDateFilter" @click.prevent="deleteDateFilter()" style="cursor: pointer; color: darkred"><i class="fa fa-close"></i></a>
       </div>
 
       <div class="col-md-4 col-sm-4 col-8 text-center">
@@ -24,22 +25,20 @@
 
     </div>
     
-    <div class="row" style="padding-bottom: 3em">
-      <div v-for="charge in charges" :key="charge.id" class="card col-lg-4 col-sm-6" style="border: none; background-color: transparent; padding: 5px 10px 30px 25px ">
-        <!-- background-color: #BAADCD !important; -->
-        <div class="card-body bg-success" v-bind:class="{ chargeFixe: charge.categorie.id == 1 }" style="border: 3px solid #000; border-radius: 12px; padding-top: 15px; padding-left: 15px;">          
-            <h5 class="card-title" style="font-size: 1.5em;">              
-              <i class="fa fa-calendar"></i> {{ charge.updatedAt | moment("DD/MM/YYYY") }}
-              <b-button v-b-modal.edit-charge class="fa fa-pencil-square-o pull-right p-1 text-primary btnEdit"                
-                @click.prevent="showModalEdit(charge.id)" 
-                title="Modifer"></b-button>
-            </h5>            
-            <p class="card-text">{{ charge.libelle }}</p>            
-            <label href="#" class="btn-primary pl-1 pr-1 montantVignette" style="margin-right: 13px; margin-bottom: 42px" >{{ parseFloat(charge.montant).toFixed(2).toString().replace(".", ",") }} €</label>            
-        </div>
-      </div> 
-    </div>
-       
+    
+    <div v-for="charge in charges" :key="charge.id" class="card col-lg-4 col-sm-6" style="border: none; background-color: transparent; padding: 5px 10px 30px 25px ">
+      <!-- background-color: #BAADCD !important; -->
+      <div class="card-body bg-success" v-bind:class="{ chargeFixe: charge.categorie.id == 1 }" style="border: 3px solid #000; border-radius: 12px; padding-top: 15px; padding-left: 15px;">          
+          <h5 class="card-title" style="font-size: 1.5em;">              
+            <i class="fa fa-calendar"></i> {{ charge.updatedAt | moment("DD/MM/YYYY") }}
+            <b-button v-b-modal.edit-charge class="fa fa-pencil-square-o pull-right p-1 text-primary btnEdit"                
+              @click.prevent="showModalEdit(charge.id)" 
+              title="Modifer"></b-button>
+          </h5>            
+          <p class="card-text">{{ charge.libelle }}</p>            
+          <label href="#" class="btn-primary pl-1 pr-1 montantVignette" style="margin-right: 13px; margin-bottom: 42px" >{{ parseFloat(charge.montant).toFixed(2).toString().replace(".", ",") }} €</label>            
+      </div>
+    </div>       
 
     <ChargesCreate @charge-ajoutee="getChargesList"></ChargesCreate>
     <ChargesEdit @charge-modifiee="getChargesList"></ChargesEdit>
@@ -76,7 +75,7 @@
           libelle: '',
           montant: 0
         },
-        currentDateFilter: '',
+        currentDateFilter: null,
         total: 0        
       };
     },
@@ -163,6 +162,14 @@
               app.total += element.montant;
         });
         app.total = app.total.toFixed(2);
+      },
+      deleteDateFilter() {
+        let app = this;
+        localStorage.removeItem('filter-mois-charges');
+        localStorage.removeItem('currentDateAffichage');
+        localStorage.removeItem('filter-annee-charges');
+        app.currentDateFilter = null;
+        app.getChargesList();
       }
     }
   };
