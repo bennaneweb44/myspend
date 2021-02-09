@@ -9,7 +9,6 @@ use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class ApiChargesController extends AbstractController
@@ -64,13 +63,6 @@ class ApiChargesController extends AbstractController
 
         // Json
         $union = array_merge($chargesMensuelles, $chargesFixes);
-
-        /*foreach($union as $key => $value) {
-            if ($value instanceof Charges && in_array($value, $chargesMensuelles) && in_array($value, $chargesFixes)) {
-                unset($union[$key]);
-            }
-        }
-        dd(count($union));*/
 
         $chargesNormalises = $this->normalizerInterface->normalize(
             $union, 
@@ -154,7 +146,7 @@ class ApiChargesController extends AbstractController
             $charge->setUpdatedAt($createdAt);
             $charge->setLibelle($libelle);
             $charge->setMontant($montant);
-            
+
             // Catégorie
             $idCategorie = $arrCharge['categorie'] == true ? 1 : 2;
             $categorie = $this->categorieChargeRepository->findOneBy(['id' => $idCategorie]);

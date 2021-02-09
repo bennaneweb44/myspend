@@ -65,13 +65,13 @@ class ChargesRepository extends ServiceEntityRepository
 
         return $this->createQueryBuilder('c')
             ->select()
-            ->where("c.createdAt >= ?1")
-            ->andWhere("c.createdAt <= ?2")
+            ->where("c.updatedAt >= ?1")
+            ->andWhere("c.updatedAt <= ?2")
             ->andWhere("c.categorie = :categorie")            
             ->setParameter(1, new \DateTime($debut))
             ->setParameter(2, new \DateTime($fin))
             ->setParameter('categorie', $categorie)
-            ->orderBy('c.createdAt', 'DESC')
+            ->orderBy('c.updatedAt', 'DESC')
             ->getQuery()
             ->getResult()
         ;
@@ -83,7 +83,7 @@ class ChargesRepository extends ServiceEntityRepository
             ->select()
             ->where("c.categorie = :categorie")
             ->setParameter('categorie', $categorie)
-            ->orderBy('c.createdAt', 'DESC')
+            ->orderBy('c.updatedAt', 'DESC')
             ->getQuery()
             ->getResult()
         ;
