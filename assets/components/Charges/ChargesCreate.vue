@@ -4,16 +4,23 @@
       <div class="d-block text-center bg-success">
 
         <div class="row pull-right" style="margin-top: -20px; margin-right: 0">
-          <span style="font-size: 2em; cursor: pointer" @click.prevent="hideModalFilters()">&times;</span>
+          <span style="font-size: 2em; cursor: pointer" @click.prevent="hideModalCreate()">&times;</span>
         </div>
 
         <div class="pull-left">
           <i class="fa fa-plus-circle"></i> Nouvelle charge                                  
         </div>
 
-        <input type="date" class="form-control form-control-sm text-primary mb-1" v-model="chargeNew.createdAt" value="" />
-        <input type="text" class="form-control form-control-sm text-primary mb-1" v-model="chargeNew.libelle" value="" placeholder="Titre" />    
-        <input type="number" class="form-control form-control-sm text-primary mb-1" v-model="chargeNew.montant" value="" placeholder="Montant en €" />     
+        <div class="mt-2 mb-2">
+          <input type="date" class="form-control form-control-sm text-primary mb-1" v-model="chargeNew.createdAt" value="" />
+          <input type="text" class="form-control form-control-sm text-primary mb-1" v-model="chargeNew.libelle" value="" placeholder="Titre" />    
+          <input type="number" class="form-control form-control-sm text-primary mb-1" v-model="chargeNew.montant" value="" placeholder="Montant en €" />     
+        </div>        
+
+        <div class="custom-control custom-switch text-left mb-2">
+          <input type="checkbox" v-model="chargeNew.categorie" class="custom-control-input" id="categorie">
+          <label class="custom-control-label" for="categorie">Fixe</label>
+        </div>
 
         <b-button @click.prevent="saveCharge()" class="btn btn-xs bg-primary" id="btnSaverCharge" style="height: 50px; padding-top: 5px" block><i class="fa fa-save"></i> Enregistrer</b-button>
       </div>
@@ -34,18 +41,21 @@
         chargeNew: {   
           createdAt: this.GetFormattedDate(new Date()),
           libelle: '',
-          montant: ''
-        },
+          montant: '',
+          categorie: false
+        },                
         showModal: false
       };
     },
     components: {
       Axios
     },
+    mounted() {
+      let app = this;
+    },
     methods: {
-      hideModalFilters() {
+      hideModalCreate() {
         let app = this;
-        console.log('trying to close modal')
         app.$refs.modal.hide();
       },
       saveCharge() {
@@ -78,7 +88,7 @@
               alert("Impossible d'enregistrer la charge. ");
           });
           
-          app.hideModal();       
+          app.hideModalCreate();       
         } else {
           alert('Au moins un champ est invalide.');
         }

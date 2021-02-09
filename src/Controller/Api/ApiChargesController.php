@@ -154,8 +154,10 @@ class ApiChargesController extends AbstractController
             $charge->setUpdatedAt($createdAt);
             $charge->setLibelle($libelle);
             $charge->setMontant($montant);
+            
             // Catégorie
-            $categorie = $this->categorieChargeRepository->findOneBy(['id' => 1]);
+            $idCategorie = $arrCharge['categorie'] == true ? 1 : 2;
+            $categorie = $this->categorieChargeRepository->findOneBy(['id' => $idCategorie]);
             $charge->setCategorie($categorie);
 
             // Save
