@@ -53,15 +53,12 @@
     components: {
       Axios
     },
-    created() {
+    mounted() {
       let app = this;       
-      
       EventBus.$on('charge-a-modifier', chargeAModifier => {                                
         app.chargeToEdit = chargeAModifier;
-      });         
-    },
-    mounted() {
-      let app = this;        
+        app.categorieChecked = app.chargeToEdit.categorie.id == 1 ? true : false;
+      });   
     },
     beforeCreate() {
       let app = this;
