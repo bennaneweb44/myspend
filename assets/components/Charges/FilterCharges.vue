@@ -115,6 +115,7 @@
           }
         ],
         allAnnees: [],
+        dateFilterDefault: '',
         showModal: false
       };
     },
@@ -122,8 +123,8 @@
       Axios
     },
     created() {
-      let app = this;      
-      
+      let app = this;    
+
       // mois en cours
       let date = new Date();
       let month = date.getMonth();
@@ -132,8 +133,13 @@
 
       let year = date.getFullYear();
       app.selectedAnnee = year;
-      let min_annee = 2020;
+      
+      if (localStorage.getItem('filter-annee-charges') && localStorage.getItem('filter-mois-charges')) {
+        app.selectedAnnee = localStorage.getItem('filter-annee-charges');
+        app.selectedMois = localStorage.getItem('filter-mois-charges');
+      }
 
+      let min_annee = 2020;
       while (year >= min_annee) {
         
         let obj = {
@@ -143,13 +149,6 @@
         app.allAnnees.push(obj);
         year--;
       }
-    },
-    mounted() {
-      let app = this;                        
-    },
-    beforeDestroy() {
-      let app = this;
-      app.showModal = false;     
     },
     methods: {
       hideModal() {

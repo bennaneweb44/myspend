@@ -187,8 +187,12 @@
     border-radius: 12px;
   }
 
-  .chargeFixe {
+  .bg-success {
     background-color: #19cc98 !important;
+  }
+
+  .chargeFixe {
+    background-color: #18bc9c !important;
   }
 
   .btnEdit, .btnEdit:hover, .btnEdit:active, .btnEdit:enabled {
