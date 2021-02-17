@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\AlimentationRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=AlimentationRepository::class)
@@ -14,36 +15,43 @@ class Alimentation
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups("alimentation:read")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("alimentation:read")
      */
     private $libelle;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups("alimentation:read")
      */
     private $montant;
 
     /**
      * @ORM\ManyToOne(targetEntity=CategorieAlimentation::class, inversedBy="alimentations")
+     * @Groups("alimentation:read")
      */
     private $categorie;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
+     * @Groups("alimentation:read")
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
+     * @Groups("alimentation:read")
      */
     private $updatedAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Groups("alimentation:read")
      */
     private $deletedAt;
 

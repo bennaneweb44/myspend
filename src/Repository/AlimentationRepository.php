@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Alimentation;
+use App\Entity\CategorieAlimentation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -47,4 +48,30 @@ class AlimentationRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function getAllByMonth($month, $year = null) 
+    {    
+        if (!$year) {
+            $year = date('y');
+        }   
+        
+        $query_date = $year . '-'. $month . '-' . '01';                
+
+        // First day of the month.
+        $debut = date('Y-m-01', strtotime($query_date));
+
+        // Last day of the month.
+        $fin =  date('Y-m-t', strtotime($query_date));
+
+        return $this->createQueryBuilder('a')
+            ->select()
+            ->where("a.updatedAt >= ?1")
+            ->andWhere("a.updatedAt <= ?2")            
+            ->setParameter(1, new \DateTime($debut))
+            ->setParameter(2, new \DateTime($fin))
+            ->orderBy('a.updatedAt', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

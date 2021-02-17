@@ -190,7 +190,7 @@ class ApiChargesController extends AbstractController
             $entityManager->flush();
         } else {
             // KO
-            throw $this->createNotFoundException('Aucune note trouvée avec cet id : ' . $id);
+            throw $this->createNotFoundException('Aucune charge trouvée avec cet id : ' . $id);
         }
 
         // Deleted

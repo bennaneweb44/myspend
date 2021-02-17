@@ -36,6 +36,12 @@ api_alimentation_list:
   format: json
   methods: GET
 
+api_alimentation_filtrees_list:
+  path: /api/alimentation/list/annee/{annee}/mois/{mois}
+  controller: App\Controller\Api\ApiAlimentationController::listByDate
+  format: json
+  methods: GET
+
 api_alimentation_create:
   path: /api/alimentation/create
   controller: App\Controller\Api\ApiAlimentationController::create
@@ -53,3 +59,10 @@ api_alimentation_delete:
   controller: App\Controller\Api\ApiAlimentationController::delete
   format: json
   methods: DELETE
+
+######################## Alimentation : catégories ####################
+api_categories_alimentation_list:
+  path: /api/alimentation/categories/list
+  controller: App\Controller\Api\ApiAlimentationController::getAllCategories
+  format: json
+  methods: GET

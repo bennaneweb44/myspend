@@ -25,36 +25,78 @@ Vue.use(IconsPlugin)
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
-// App
-import App from './components/App'
+// Global methos
+Vue.mixin({
+  methods: {
+    GetFormattedDate(date) {        
+      let month = date . getMonth() +1;
+      let day = date . getDate();
+      let year = date . getFullYear();
+
+      return year + '-' + (month < 10 ? '0' + month : month) + '-' + (day < 10 ? '0' + day : day);
+    },
+    GetHeaders() {
+      let options = {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }      
+      return options;
+    }
+  },
+})
 
 // Components 
 import ChargesList from './components/Charges/ChargesList.vue'  
-import ChargesEdit from './components/Charges/ChargesEdit.vue'  
+import AlimentationList from './components/Alimentation/AlimentationList.vue'  
 
-if (document.getElementById('app') !== null) {
+if (document.getElementById('appCharges') !== null) {
   const routes = [
     {
         path: '/charges',
         components: {
-            chargesList: ChargesList,
-            chargesEdit: ChargesEdit
+            ChargesList
         },
         name: 'charges_list'
     }
   ];
 
   // Routeur
-  const router = new VueRouter({ routes });
+  const router = new VueRouter({ mode: 'history', routes: routes });
 
   Vue.prototype.$eventBus = new Vue(); // Global event bus
 
   new Vue({
-    el: '#app',
+    el: '#appCharges',
     router: router,
-    template: '<app/>',
+    template: '<ChargesList/>',
     components: {
-      App
+      ChargesList
+    }
+  });
+}
+else if (document.getElementById('appAlimentation') !== null) {
+  const routes = [
+    {
+      path: '/alimentation',
+      components: {
+          AlimentationList
+      },
+      name: 'alimentation_list'
+    }
+  ];
+
+  // Routeur
+  const router = new VueRouter({ mode: 'history', routes: routes });
+
+  Vue.prototype.$eventBus = new Vue(); // Global event bus
+
+  new Vue({
+    el: '#appAlimentation',
+    router: router,
+    template: '<alimentationList/>',
+    components: {
+      AlimentationList
     }
   });
 }

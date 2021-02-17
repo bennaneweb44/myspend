@@ -10,7 +10,7 @@
         <div class="pull-left">
           <i class="fa fa-pencil-square"></i> Mise à jour                          
         </div>        
-        <b-button @click.prevent="deleteCharge(chargeToEdit.id)" class="btn btn-xs bg-danger text-center" id="btnDeleteCharge" style="height: 50px; padding-top: 5px" block><i class="fa fa-trash"></i> Supprimer</b-button>          
+        <b-button @click.prevent="deleteCharge(chargeToEdit.id)" class="btn btn-xs bg-danger text-center" style="height: 50px; padding-top: 5px" block><i class="fa fa-trash"></i> Supprimer</b-button>          
 
         <div class="mt-2 mb-2">
           <input type="date" class="form-control form-control-sm text-primary mb-1" v-model="chargeToEdit.updatedAt" value="" />
@@ -23,7 +23,7 @@
           <label class="custom-control-label" for="categorie">Fixe</label>
         </div>
 
-        <b-button @click.prevent="updateCharge(chargeToEdit.id)" class="btn btn-xs bg-primary" id="btnSaverCharge" style="height: 50px; padding-top: 5px" block><i class="fa fa-save"></i> Enregistrer</b-button>        
+        <b-button @click.prevent="updateCharge(chargeToEdit.id)" class="btn btn-xs bg-primary" style="height: 50px; padding-top: 5px" block><i class="fa fa-save"></i> Enregistrer</b-button>        
       </div>
     </b-modal>
   </div>
@@ -132,5 +132,5 @@
   }
   h5.card-title, h5.card-title > i {
     font-size: 26px !important;
-  }
+  }  
 </style>

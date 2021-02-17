@@ -6,6 +6,7 @@ use App\Repository\CategorieAlimentationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=CategorieAlimentationRepository::class)
@@ -16,41 +17,48 @@ class CategorieAlimentation
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups("CategorieAlimentation:read")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("CategorieAlimentation:read")
      */
     private $label;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("CategorieAlimentation:read")
      */
     private $couleur;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("CategorieAlimentation:read")
      */
     private $icone;
 
     /**
-     * @ORM\OneToMany(targetEntity=Alimentation::class, mappedBy="categorie")
+     * @ORM\OneToMany(targetEntity=Alimentation::class, mappedBy="categorie")     
      */
     private $alimentations;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
+     * @Groups("CategorieAlimentation:read")
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
+     * @Groups("CategorieAlimentation:read")
      */
     private $updatedAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Groups("CategorieAlimentation:read")
      */
     private $deletedAt;
 

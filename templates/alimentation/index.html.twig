@@ -1,16 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Charges{% endblock %}
+{% block title %}Alimentation{% endblock %}
 
 {% block body %}
 
 <div class="mt-4 mb-4" style="padding: 5px 0">
     <h3 class="text-center">
-        <i class="fa fa-sort-amount-asc" style="font-size: 0.8em"></i> Charges
+        <i class="fa fa-cutlery" style="font-size: 0.8em"></i> Alimentation
     </h3>
 </div>
 
-<div id="appCharges"></div>
+<div id="appAlimentation"></div>
 
 {% endblock %}
 
@@ -18,8 +18,12 @@
 <style>
 
     .modal-body {
-        background-color: #18bc9c !important;
-    } 
+        background-color: #3498db !important;
+    }  
+
+    .bg-info {
+        background-color: #3498db !important;
+    }
 
     .card-body {
         margin-top: -15px;   

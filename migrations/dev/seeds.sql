@@ -14,8 +14,8 @@ alter table alimentation AUTO_INCREMENT 1;
 
 INSERT INTO `categorie_alimentation` (`id`, `label`, `couleur`, `icone`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, 'E-leclerc', '#C5AEF0', 'fa fa-shopping-cart', '2021-01-14 04:16:33', '2021-01-14 04:16:33', NULL),
-(2, 'Boucher', '#F7927C', 'fa fa-utensils', '2021-01-14 04:16:33', '2021-01-14 04:16:33', NULL),
-(3, 'Poissonnier', '#AAFBFF', 'fa fa-fish', '2021-01-14 04:16:33', '2021-01-14 04:16:33', NULL);
+(2, 'Boucher', '#F7927C', 'fa fa-chain-broken', '2021-01-14 04:16:33', '2021-01-14 04:16:33', NULL),
+(3, 'Poissonnier', '#AAFBFF', 'fa fa-scissors', '2021-01-14 04:16:33', '2021-01-14 04:16:33', NULL);
 
 INSERT INTO `categorie_charge` (`id`, `label`, `couleur`, `icone`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, 'Charges fixes', '#FAE288', 'fa fa-edit', '2021-01-14 04:16:33', '2021-01-14 04:16:33', NULL),

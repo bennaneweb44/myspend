@@ -38,7 +38,7 @@
           <p class="card-text">{{ charge.libelle }}</p>            
           <label href="#" class="btn-primary pl-1 pr-1 montantVignette" style="margin-right: 13px; margin-bottom: 42px" >{{ parseFloat(charge.montant).toFixed(2).toString().replace(".", ",") }} €</label>            
       </div>
-    </div>       
+    </div>
 
     <ChargesCreate @charge-ajoutee="getChargesList"></ChargesCreate>
     <ChargesEdit @charge-modifiee="getChargesList" @charge-supprimee="getChargesList"></ChargesEdit>
@@ -170,26 +170,24 @@
   };
 </script>
 
-<style>
+<style scoped>
   .center {
     text-align: center;
   }
   h5.card-title, h5.card-title > i {
     font-size: 26px !important;
   }
-  .modal-body {
-    background-color: #18bc9c;
+
+  .bg-success {
+    background-color: #19cc98 !important;
   }
+  
   .montantVignette {
     position: absolute;
     bottom: 0;
     right: 10px;
     border-radius: 12px;
-  }
-
-  .bg-success {
-    background-color: #19cc98 !important;
-  }
+  }  
 
   .chargeFixe {
     background-color: #18bc9c !important;
