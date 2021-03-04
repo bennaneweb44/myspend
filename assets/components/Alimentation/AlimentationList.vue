@@ -148,7 +148,7 @@
             // Valorisation
             app.alimentations = resp.data;             
             // total
-            app.SetTotalAlimentations();                
+            app.SetTotalAlimentations();            
           }).catch(function (err) {
               alert("Impossible de charger la liste des alimentations.");
           });
