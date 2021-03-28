@@ -58,15 +58,7 @@
     mounted() {
       let app = this;
 
-      // todo : select element in current category     
-      Axios.get('api/alimentation/categories/list').then(function (resp) {
-        // Toutes les catégories
-        app.allCategories = resp.data;                
-        // Premier choix par défaut
-        app.alimentationNew.idCategorie = app.allCategories[0].id;
-      }).catch(function (err) {
-          alert("Impossible de charger la liste des catégories d'alimentation.");
-      });      
+      this.loadCategoriesWithDefault()      ;
     },
     methods: {
       hideModalCreate() {
@@ -76,7 +68,7 @@
       saveAlimentation() {
         let app = this;
 
-        if ((!isNaN(app.alimentationNew.montant) && app.alimentationNew.montant != "" ) && app.alimentationNew.createdAt != "" && app.alimentationNew.libelle != "") {
+        if ((!isNaN(app.alimentationNew.montant) && app.alimentationNew.montant != "" ) && app.alimentationNew.createdAt != "" && app.alimentationNew.libelle != "" && app.alimentationNew.idCategorie > 0) {
 
           // montant : 2 chiffres après la virgule
           let montantString = app.alimentationNew.montant.toString().replace(',', '.');
@@ -103,11 +95,25 @@
               alert("Impossible d'enregistrer l'alimentation. ");
           });
           
+          app.loadCategoriesWithDefault();
           app.hideModalCreate();       
         } else {
           alert('Au moins un champ est invalide.');
         }
 
+      },
+      loadCategoriesWithDefault() {
+        let app = this;
+
+        // todo : select element in current category     
+        Axios.get('api/alimentation/categories/list').then(function (resp) {
+          // Toutes les catégories
+          app.allCategories = resp.data;                
+          // Premier choix par défaut
+          app.alimentationNew.idCategorie = app.allCategories[0].id;
+        }).catch(function (err) {
+            alert("Impossible de charger la liste des catégories d'alimentation.");
+        });
       }
     }
   };
