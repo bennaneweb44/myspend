@@ -31,7 +31,7 @@
           </div>        
 
           <div class="col-md-12 mt-2">
-            <b-button @click.prevent="applyDateFilter()" class="btn btn-xs bg-primary" style="height: 50px; padding: 0" block><i class="fa fa-check"></i> Appliquer</b-button>
+            <b-button @click.prevent="applyDateFilter()" class="btn btn-xs bg-primary" style="height: 65px; padding: 0" block><i class="fa fa-check"></i> Appliquer</b-button>
           </div>
         </div>
         

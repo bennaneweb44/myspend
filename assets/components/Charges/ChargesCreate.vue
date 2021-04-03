@@ -22,7 +22,7 @@
           <label class="custom-control-label" for="categorie">Fixe</label>
         </div>
 
-        <b-button @click.prevent="saveCharge()" class="btn btn-xs bg-primary" id="btnSaverCharge" style="height: 50px; padding-top: 5px" block><i class="fa fa-save"></i> Enregistrer</b-button>
+        <b-button @click.prevent="saveCharge()" class="btn btn-xs bg-primary" id="btnSaverCharge" style="height: 65px; padding-top: 5px" block><i class="fa fa-save"></i> Enregistrer</b-button>
       </div>
     </b-modal>
   </div>

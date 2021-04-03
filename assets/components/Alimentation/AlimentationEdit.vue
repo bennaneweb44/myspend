@@ -10,7 +10,7 @@
         <div class="pull-left">
           <i class="fa fa-pencil-square"></i> Mise à jour                          
         </div>        
-        <b-button @click.prevent="deleteAlimentation(alimentationToEdit.id)" class="btn btn-xs bg-danger text-center" style="height: 50px; padding-top: 5px" block><i class="fa fa-trash"></i> Supprimer</b-button>          
+        <b-button @click.prevent="deleteAlimentation(alimentationToEdit.id)" class="btn btn-xs bg-danger text-center" style="height: 65px; padding-top: 5px" block><i class="fa fa-trash"></i> Supprimer</b-button>          
 
         <div class="mt-2 mb-2">
           <input type="date" class="form-control form-control-sm text-primary mb-1" v-model="alimentationToEdit.updatedAt" value="" />
@@ -25,7 +25,7 @@
 
         </div>        
 
-        <b-button @click.prevent="updateAlimentation(alimentationToEdit.id)" class="btn btn-xs bg-primary" style="height: 50px; padding-top: 5px" block><i class="fa fa-save"></i> Enregistrer</b-button>        
+        <b-button @click.prevent="updateAlimentation(alimentationToEdit.id)" class="btn btn-xs bg-primary" style="height: 65px; padding-top: 5px" block><i class="fa fa-save"></i> Enregistrer</b-button>        
       </div>
     </b-modal>
   </div>
