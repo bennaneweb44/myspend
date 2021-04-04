@@ -91,6 +91,10 @@
                 montant: '',
                 commentaires: '',
               };
+              app.$toast.open({
+                  message: 'Alimentation ajoutée avec succès !',
+                  type: 'success',
+              });
               app.$emit("alimentation-ajoutee");
             }
 

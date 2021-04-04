@@ -53,7 +53,7 @@
       };
     },
     components: {
-      Axios
+      Axios,
     },
     mounted() {
       let app = this;       
@@ -97,6 +97,10 @@
             // Transfert charge vers "ChargesList"
             if (resp.data.message == 'save_charge_ok') {
               app.$emit('charge-modifiee');
+              app.$toast.open({
+                  message: 'Charge mise à jour avec succès !',
+                  type: 'success',
+              });
             }
 
           }).catch(function (err) {
@@ -114,6 +118,10 @@
           Axios.delete('api/charges/delete/'+id, app.GetHeaders()).then(function (resp) {
             // Transfert charge vers "ChargesList"
             if (resp.data.message == 'delete_charge_ok') {
+              app.$toast.open({
+                  message: 'Charge supprimée !',
+                  type: 'error',
+              });
               app.$emit('charge-supprimee');
             }
 

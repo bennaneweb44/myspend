@@ -165,6 +165,10 @@
         localStorage.removeItem('currentDateAffichage');
         localStorage.removeItem('filter-annee-charges');
         app.currentDateFilter = null;
+        app.$toast.open({
+            message: 'Filtrage par date désactivé !',
+            type: 'warning',
+        });
         app.getChargesList();
       }
     }

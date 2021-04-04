@@ -165,6 +165,11 @@
         // Event for filtered listing
         app.$emit('charges-filtrees');
 
+        app.$toast.open({
+            message: 'Filtre appliqué : ' + app.selectedMois + '/' + app.selectedAnnee + ' !',
+            type: 'succès',
+        });
+
         app.hideModal();
       }
     }

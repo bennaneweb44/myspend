@@ -25,6 +25,11 @@ Vue.use(IconsPlugin)
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
+// Toast
+import VueToast from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
+Vue.use(VueToast);
+
 // Global methos
 Vue.mixin({
   methods: {
@@ -55,7 +60,7 @@ if (document.getElementById('appCharges') !== null) {
     {
         path: '/charges',
         components: {
-            ChargesList
+            ChargesList,
         },
         name: 'charges_list',
     }
@@ -72,6 +77,7 @@ if (document.getElementById('appCharges') !== null) {
     template: '<ChargesList/>',
     components: {
       ChargesList,
+      VueToast,
     },
   });
 }
@@ -97,6 +103,7 @@ else if (document.getElementById('appAlimentation') !== null) {
     template: '<alimentationList/>',
     components: {
       AlimentationList,
+      VueToast,
     },
   });
 }

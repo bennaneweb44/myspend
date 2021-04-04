@@ -84,6 +84,12 @@
                 commentaires: '',
                 montant: '',
               };
+
+              app.$toast.open({
+                  message: 'Charge ajoutée avec succès !',
+                  type: 'success',
+              });
+
               app.$emit("charge-ajoutee");
             }
 

@@ -114,6 +114,10 @@
           Axios.put('api/alimentation/update/'+id, alimentationObject, app.GetHeaders()).then(function (resp) {
             // Transfert alimentation vers "AlimentationList"
             if (resp.data.message == 'save_alimentation_ok') {
+              app.$toast.open({
+                  message: 'Alimentation mise à jour avec succès !',
+                  type: 'success',
+              });
               app.$emit('alimentation-modifiee');
             }
 
@@ -132,6 +136,10 @@
           Axios.delete('api/alimentation/delete/'+id, app.GetHeaders()).then(function (resp) {
             // Transfert alimentation vers "AlimentationList"
             if (resp.data.message == 'delete_alimentation_ok') {
+              app.$toast.open({
+                  message: 'Alimentation supprimée !',
+                  type: 'error',
+              });
               app.$emit('alimentation-supprimee');
             }
 

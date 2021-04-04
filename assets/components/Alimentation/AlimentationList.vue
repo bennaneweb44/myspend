@@ -169,6 +169,10 @@
         localStorage.removeItem('currentDateAlimentationAffichage');
         localStorage.removeItem('filter-annee-alimentations');
         app.currentDateFilter = null;
+        app.$toast.open({
+            message: 'Filtrage par date désactivé !',
+            type: 'warning',
+        });
         app.getAlimentationList();
       }
     }

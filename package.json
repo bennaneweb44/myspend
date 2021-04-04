@@ -26,6 +26,7 @@
         "vue-moment": "^4.1.0",
         "vue-router": "^3.4.9",
         "vue-template-compiler": "^2.6.12",
+        "vue-toast-notification": "^0.6.1",
         "weekstart": "^1.0.1"
     }
 }
