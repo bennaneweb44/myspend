@@ -22,7 +22,7 @@ final class Version20210403193103 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE alimentation ADD commentaires LONGTEXT DEFAULT NULL');
         $this->addSql('ALTER TABLE charges ADD commentaires LONGTEXT DEFAULT NULL');
-        $this->addSql('ALTER TABLE user CHANGE roles roles JSON NOT NULL');
+        $this->addSql('ALTER TABLE user CHANGE roles roles TEXT NOT NULL');
     }
 
     public function down(Schema $schema) : void

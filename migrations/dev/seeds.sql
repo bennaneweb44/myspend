@@ -21,7 +21,7 @@ INSERT INTO `categorie_charge` (`id`, `label`, `couleur`, `icone`, `created_at`,
 (1, 'Charges fixes', '#FAE288', 'fa fa-edit', '2021-01-14 04:16:33', '2021-01-14 04:16:33', NULL),
 (2, 'Charges variables', '#98D4E0', 'fa fa-calculator', '2021-01-14 04:16:33', '2021-01-14 04:16:33', NULL);
 
-/****************************************************************************************/
+/***************************************** Dump from Server 04/04/21 ***********************************************/
 
 INSERT INTO `alimentation` (`id`, `categorie_id`, `libelle`, `montant`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, 1, 'Courses', 46.09, '2021-01-14 04:16:33', '2021-01-14 04:16:33', NULL),
