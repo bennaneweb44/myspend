@@ -15,7 +15,7 @@
         <div class="mt-2 mb-2">
           <input type="date" class="form-control form-control-sm text-primary mb-1" v-model="chargeToEdit.updatedAt" value="" />
           <input type="text" class="form-control form-control-sm text-primary mb-1" v-model="chargeToEdit.libelle" value="" placeholder="Titre" />   
-          <textarea class="form-control form-control-sm text-primary mb-1" v-model="chargeToEdit.commentaires" value="" placeholder="Commentaires (optionnel)"></textarea>  
+          <textarea class="form-control form-control-sm text-primary mb-1" rows="4" v-model="chargeToEdit.commentaires" value="" placeholder="Commentaires (optionnel)"></textarea>  
           <input type="number" class="form-control form-control-sm text-primary mb-1" v-model="chargeToEdit.montant" value="" placeholder="Montant en €" />     
         </div>        
 
@@ -114,7 +114,7 @@
       deleteCharge(id) {
         let app = this;
 
-        if (!isNaN(id)) {
+        if (!isNaN(id) && confirm("Voulez-vous vraiment supprimer cette charge ?")) {
           
           Axios.delete('api/charges/delete/'+id, app.GetHeaders()).then(function (resp) {
             // Transfert charge vers "ChargesList"
@@ -145,4 +145,7 @@
   h5.card-title, h5.card-title > i {
     font-size: 26px !important;
   }  
+  textarea {
+    resize: vertical;
+  }
 </style>

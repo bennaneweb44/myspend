@@ -15,7 +15,7 @@
         <div class="mt-2 mb-2">
           <input type="date" class="form-control form-control-sm text-primary mb-1" v-model="alimentationToEdit.updatedAt" value="" />
           <input type="text" class="form-control form-control-sm text-primary mb-1" v-model="alimentationToEdit.libelle" value="" placeholder="Titre" />    
-          <textarea class="form-control form-control-sm text-primary mb-1" v-model="alimentationToEdit.commentaires" value="" placeholder="Commentaires (optionnel)"></textarea> 
+          <textarea class="form-control form-control-sm text-primary mb-1" rows="4" v-model="alimentationToEdit.commentaires" value="" placeholder="Commentaires (optionnel)"></textarea> 
           <input type="number" class="form-control form-control-sm text-primary mb-1" v-model="alimentationToEdit.montant" value="" placeholder="Montant en €" />     
 
           <select v-model="idCurrentCategory" class="col-md-12 form-control form-control-sm mb-1" style="font-size: 1em; ">                  
@@ -136,7 +136,7 @@
           
           Axios.delete('api/alimentation/delete/'+id, app.GetHeaders()).then(function (resp) {
             // Transfert alimentation vers "AlimentationList"
-            if (resp.data.message == 'delete_alimentation_ok') {
+            if (resp.data.message == 'delete_alimentation_ok' && confirm("Voulez-vous vraiment supprimer cette alimentation ?")) {
               app.$toast.open({
                   message: 'Alimentation supprimée !',
                   type: 'error',
@@ -163,4 +163,7 @@
   h5.card-title, h5.card-title > i {
     font-size: 26px !important;
   }  
+  textarea {
+    resize: vertical;
+  }
 </style>

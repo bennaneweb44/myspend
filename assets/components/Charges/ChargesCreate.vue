@@ -14,7 +14,7 @@
         <div class="mt-2 mb-2">
           <input type="date" class="form-control form-control-sm text-primary mb-1" v-model="chargeNew.createdAt" value="" />
           <input type="text" class="form-control form-control-sm text-primary mb-1" v-model="chargeNew.libelle" value="" placeholder="Titre" />    
-          <textarea class="form-control form-control-sm text-primary mb-1" v-model="chargeNew.commentaires" value="" placeholder="Commentaires (optionnel)"></textarea> 
+          <textarea class="form-control form-control-sm text-primary mb-1" rows="4" v-model="chargeNew.commentaires" value="" placeholder="Commentaires (optionnel)"></textarea> 
           <input type="number" class="form-control form-control-sm text-primary mb-1" v-model="chargeNew.montant" value="" placeholder="Montant en €" />     
         </div>        
 
@@ -114,5 +114,8 @@
   }
   h5.card-title, h5.card-title > i {
     font-size: 26px !important;
+  }
+  textarea {
+    resize: vertical;
   }
 </style>
