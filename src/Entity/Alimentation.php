@@ -55,6 +55,11 @@ class Alimentation
      */
     private $deletedAt;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $commentaires;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -128,6 +133,18 @@ class Alimentation
     public function setDeletedAt(?\DateTimeInterface $deletedAt): self
     {
         $this->deletedAt = $deletedAt;
+
+        return $this;
+    }
+
+    public function getCommentaires(): ?string
+    {
+        return $this->commentaires;
+    }
+
+    public function setCommentaires(?string $commentaires): self
+    {
+        $this->commentaires = $commentaires;
 
         return $this;
     }
