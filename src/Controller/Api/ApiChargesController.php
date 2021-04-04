@@ -6,6 +6,7 @@ use App\Entity\Charges;
 use App\Repository\CategorieChargeRepository;
 use App\Repository\ChargesRepository;
 use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,22 +17,24 @@ class ApiChargesController extends AbstractController
     private $chargesRepository;
     private $normalizerInterface;
     private $categorieChargeRepository;
+    private $entityManager;
 
-    public function __construct(ChargesRepository $chargesRepository, CategorieChargeRepository $categorieChargeRepository, NormalizerInterface $normalizerInterface)
+    public function __construct(ChargesRepository $chargesRepository, 
+                                CategorieChargeRepository $categorieChargeRepository, 
+                                NormalizerInterface $normalizerInterface,
+                                EntityManagerInterface $entityManager)
     {
         $this->chargesRepository = $chargesRepository;
         $this->categorieChargeRepository = $categorieChargeRepository;
         $this->normalizerInterface = $normalizerInterface;
+        $this->entityManager = $entityManager;
     }
     
     public function index(): JsonResponse
     {
-        // Get current mounth
-        $month = date('m');        
-
         // Get all items of this mounth        
         $categorieVariables = $this->categorieChargeRepository->findOneBy(['id' => 2]);
-        $chargesMensuelles = $this->chargesRepository->getAllVariablesByMonth($categorieVariables, $month, null);        
+        $chargesMensuelles = $this->chargesRepository->getAllChargesVariablesByMonth($categorieVariables);        
 
         // Get all <Charges fixes>
         $categorieFixes = $this->categorieChargeRepository->findOneBy(['id' => 1]);                
@@ -55,7 +58,7 @@ class ApiChargesController extends AbstractController
     {
         // Get all items of this mounth        
         $categorieVariables = $this->categorieChargeRepository->findOneBy(['id' => 2]);
-        $chargesMensuelles = $this->chargesRepository->getAllVariablesByMonth($categorieVariables, $mois, $annee);
+        $chargesMensuelles = $this->chargesRepository->getAllChargesVariablesByMonth($categorieVariables, $mois, $annee);
 
         // Get all <Charges fixes>
         $categorieFixes = $this->categorieChargeRepository->findOneBy(['id' => 1]);
@@ -78,8 +81,6 @@ class ApiChargesController extends AbstractController
     
     public function update($id, Request $request)
     {
-        $entityManager = $this->getDoctrine()->getManager();        
-
         if ($request->getContent() && $id && is_numeric($id) && $id > 0) {
             $object = $request->getContent();
             $arrObject = json_decode($object, true);
@@ -101,6 +102,7 @@ class ApiChargesController extends AbstractController
             $updatedAt = new DateTime($arrCharge['updatedAt']);
             $libelle = $arrCharge['libelle'];
             $montant = $arrCharge['montant'];
+            $commentaires = $arrCharge['commentaires'];
 
             // Catégorie
             $idCategorie = $arrCharge['categorie'] == true ? 1 : 2;
@@ -111,9 +113,10 @@ class ApiChargesController extends AbstractController
             $charge->setUpdatedAt($updatedAt);
             $charge->setLibelle($libelle);
             $charge->setMontant($montant);
+            $charge->setCommentaires($commentaires);
 
             // Update
-            $entityManager->flush();
+            $this->entityManager->flush();
 
             // OK
             $response = new JsonResponse(json_encode([
@@ -133,8 +136,6 @@ class ApiChargesController extends AbstractController
     
     public function create(Request $request)
     {
-        $entityManager = $this->getDoctrine()->getManager();        
-
         if ($request->getContent()) {
             $object = $request->getContent();
             $arrObject = json_decode($object, true);
@@ -144,6 +145,7 @@ class ApiChargesController extends AbstractController
             $createdAt = new DateTime($arrCharge['createdAt']);
             $libelle = $arrCharge['libelle'];
             $montant = $arrCharge['montant'];
+            $commentaires = $arrCharge['commentaires'];
 
             // Object
             $charge = new Charges();
@@ -151,6 +153,7 @@ class ApiChargesController extends AbstractController
             $charge->setUpdatedAt($createdAt);
             $charge->setLibelle($libelle);
             $charge->setMontant($montant);
+            $charge->setCommentaires($commentaires);
 
             // Catégorie
             $idCategorie = $arrCharge['categorie'] == true ? 1 : 2;
@@ -158,8 +161,8 @@ class ApiChargesController extends AbstractController
             $charge->setCategorie($categorie);
 
             // Save
-            $entityManager->persist($charge);
-            $entityManager->flush();
+            $this->entityManager->persist($charge);
+            $this->entityManager->flush();
 
             // OK
             $response = new JsonResponse(json_encode([
@@ -179,15 +182,13 @@ class ApiChargesController extends AbstractController
 
     public function delete($id) 
     {
-        $entityManager = $this->getDoctrine()->getManager();       
-
         // Get charge by id
         $charge = $this->chargesRepository->findOneBy(['id' => $id]);
         
         // Suppression
         if ($charge && $charge instanceof Charges) {
-            $entityManager->remove($charge);
-            $entityManager->flush();
+            $this->entityManager->remove($charge);
+            $this->entityManager->flush();
         } else {
             // KO
             throw $this->createNotFoundException('Aucune charge trouvée avec cet id : ' . $id);

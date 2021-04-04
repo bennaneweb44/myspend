@@ -3,9 +3,11 @@
 namespace App\Controller\Api;
 
 use App\Entity\Alimentation;
+use App\Entity\CategorieAlimentation;
 use App\Repository\CategorieAlimentationRepository;
 use App\Repository\AlimentationRepository;
 use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,12 +18,17 @@ class ApiAlimentationController extends AbstractController
     private $alimentationRepository;
     private $normalizerInterface;
     private $categorieAlimentationRepository;
+    private $entityManager;
 
-    public function __construct(AlimentationRepository $alimentationRepository, CategorieAlimentationRepository $categorieAlimentationRepository, NormalizerInterface $normalizerInterface)
+    public function __construct(AlimentationRepository $alimentationRepository, 
+                                CategorieAlimentationRepository $categorieAlimentationRepository, 
+                                NormalizerInterface $normalizerInterface,
+                                EntityManagerInterface $entityManager)
     {
         $this->alimentationRepository = $alimentationRepository;
         $this->categorieAlimentationRepository = $categorieAlimentationRepository;
         $this->normalizerInterface = $normalizerInterface;
+        $this->entityManager = $entityManager;
     }
     
     public function index(): JsonResponse
@@ -79,8 +86,6 @@ class ApiAlimentationController extends AbstractController
 
     public function update($id, Request $request)
     {
-        $entityManager = $this->getDoctrine()->getManager();        
-
         if ($request->getContent() && $id && is_numeric($id) && $id > 0) {
             $object = $request->getContent();
             
@@ -103,6 +108,7 @@ class ApiAlimentationController extends AbstractController
             $updatedAt = new DateTime($arrAlimentation['updatedAt']);
             $libelle = $arrAlimentation['libelle'];
             $montant = $arrAlimentation['montant'];
+            $commentaires = $arrAlimentation['commentaires'];
 
             // Catégorie
             $idCategorie = $arrAlimentation['categorie']['id'];
@@ -113,9 +119,10 @@ class ApiAlimentationController extends AbstractController
             $alimentation->setUpdatedAt($updatedAt);
             $alimentation->setLibelle($libelle);
             $alimentation->setMontant($montant);
+            $alimentation->setCommentaires($commentaires);
 
             // Update
-            $entityManager->flush();
+            $this->entityManager->flush();
 
             // OK
             $response = new JsonResponse(json_encode([
@@ -135,8 +142,6 @@ class ApiAlimentationController extends AbstractController
     
     public function create(Request $request)
     {
-        $entityManager = $this->getDoctrine()->getManager();        
-
         if ($request->getContent()) {
             $object = $request->getContent();
 
@@ -147,6 +152,7 @@ class ApiAlimentationController extends AbstractController
             $createdAt = new DateTime($arrAlimentation['createdAt']);
             $libelle = $arrAlimentation['libelle'];
             $montant = $arrAlimentation['montant'];
+            $commentaires = $arrAlimentation['commentaires'];
 
             // Object
             $alimentation = new Alimentation();
@@ -154,6 +160,7 @@ class ApiAlimentationController extends AbstractController
             $alimentation->setUpdatedAt($createdAt);
             $alimentation->setLibelle($libelle);
             $alimentation->setMontant($montant);
+            $alimentation->setCommentaires($commentaires);
 
             // Catégorie
             $idCategorie = $arrAlimentation['idCategorie'];
@@ -161,8 +168,8 @@ class ApiAlimentationController extends AbstractController
             $alimentation->setCategorie($categorie);
 
             // Save
-            $entityManager->persist($alimentation);
-            $entityManager->flush();
+            $this->entityManager->persist($alimentation);
+            $this->entityManager->flush();
 
             // OK
             $response = new JsonResponse(json_encode([
@@ -180,46 +187,50 @@ class ApiAlimentationController extends AbstractController
         return $response;
     }
 
-    public function delete($id) 
+    public function delete($id): ?JsonResponse
     {
-        $entityManager = $this->getDoctrine()->getManager();       
+        if ($id && is_numeric($id) && $id > 0) {
+            // Get alimentation by id
+            $alimentation = $this->alimentationRepository->findOneBy(['id' => $id]);
+            
+            // Suppression
+            if ($alimentation && $alimentation instanceof Alimentation) {
+                $this->entityManager->remove($alimentation);
+                $this->entityManager->flush();
+            } else {
+                // KO
+                throw $this->createNotFoundException('Aucune alimentation trouvée avec cet id : ' . $id);
+            }
 
-        // Get alimentation by id
-        $alimentation = $this->alimentationRepository->findOneBy(['id' => $id]);
-        
-        // Suppression
-        if ($alimentation && $alimentation instanceof Alimentation) {
-            $entityManager->remove($alimentation);
-            $entityManager->flush();
-        } else {
-            // KO
-            throw $this->createNotFoundException('Aucune alimentation trouvée avec cet id : ' . $id);
+            // Deleted
+            $response = new JsonResponse(json_encode([
+                'message' => 'delete_alimentation_ok'
+            ]), 200, [], true);             
+
+            return $response;
         }
-
-        // Deleted
-        $response = new JsonResponse(json_encode([
-            'message' => 'delete_alimentation_ok'
-        ]), 200, [], true);             
-
-        return $response;
+        
+        return null;
     }
 
-    public function getAllCategories() : JsonResponse
+    public function getAllCategories(): ?JsonResponse
     {
         // Toutes les catégories
         $allCategories = $this->categorieAlimentationRepository->findAll();
 
-        $allCategoriesNormalises = $this->normalizerInterface->normalize(
-            $allCategories, 
-            'json', 
-            ['groups' => ['CategorieAlimentation:read']]
-        );
+        if ($allCategories && count($allCategories)) {
+            $allCategoriesNormalises = $this->normalizerInterface->normalize(
+                $allCategories, 
+                'json', 
+                ['groups' => ['CategorieAlimentation:read']]
+            );
+    
+            // Json response
+            $response = new JsonResponse(json_encode($allCategoriesNormalises), 200, [], true);
+            
+            return $response;
+        }
 
-        $allCategories = $allCategoriesNormalises;
-
-        // Json response
-        $response = new JsonResponse(json_encode($allCategories), 200, [], true);
-        
-        return $response;
+        return null;
     }
 }

@@ -13,7 +13,8 @@
 
         <div class="mt-2 mb-2">
           <input type="date" class="form-control form-control-sm text-primary mb-1" v-model="alimentationNew.createdAt" value="" />
-          <input type="text" class="form-control form-control-sm text-primary mb-1" v-model="alimentationNew.libelle" value="" placeholder="Titre" />    
+          <input type="text" class="form-control form-control-sm text-primary mb-1" v-model="alimentationNew.libelle" value="" placeholder="Titre" />   
+          <textarea class="form-control form-control-sm text-primary mb-1" v-model="alimentationNew.commentaires" value="" placeholder="Commentaires (optionnel)"></textarea> 
           <input type="number" class="form-control form-control-sm text-primary mb-1" v-model="alimentationNew.montant" value="" placeholder="Montant en €" />    
 
           <select v-model="alimentationNew.idCategorie" class="col-md-12 form-control form-control-sm mb-1" style="font-size: 1em; ">                  
@@ -47,6 +48,7 @@
           createdAt: this.GetFormattedDate(new Date()),
           libelle: '',
           montant: '',
+          commentaires: '',
           idCategorie: 0
         },                
         showModal: false
@@ -86,7 +88,8 @@
               app.alimentationNew = {   
                 createdAt: app.GetFormattedDate(new Date()),
                 libelle: '',
-                montant: ''
+                montant: '',
+                commentaires: '',
               };
               app.$emit("alimentation-ajoutee");
             }

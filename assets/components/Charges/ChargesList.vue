@@ -67,18 +67,19 @@
           id: 0,          
           updatedAt: '',
           libelle: '',
+          commentaires: '',
           montant: 0,
-          categorie: null
+          categorie: null,
         },        
         currentDateFilter: null,
-        total: 0        
+        total: 0,
       };
     },
     components: {
       Axios,
       ChargesEdit,
       ChargesCreate,
-      FilterCharges
+      FilterCharges,
     },
     created() {
       let app = this;       

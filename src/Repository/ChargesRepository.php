@@ -49,32 +49,36 @@ class ChargesRepository extends ServiceEntityRepository
     }
     */
 
-    public function getAllVariablesByMonth(CategorieCharge $categorie, $month, $year = null) 
-    {    
-        if (!$year) {
-            $year = date('y');
-        }   
-        
-        $query_date = $year . '-'. $month . '-' . '01';                
-
-        // First day of the month.
-        $debut = date('Y-m-01', strtotime($query_date));
-
-        // Last day of the month.
-        $fin =  date('Y-m-t', strtotime($query_date));
-
-        return $this->createQueryBuilder('c')
+    public function getAllChargesVariablesByMonth(CategorieCharge $categorie, $month = null, $year = null) 
+    {
+        $return = $this->createQueryBuilder('c')
             ->select()
-            ->where("c.updatedAt >= ?1")
-            ->andWhere("c.updatedAt <= ?2")
-            ->andWhere("c.categorie = :categorie")            
-            ->setParameter(1, new \DateTime($debut))
-            ->setParameter(2, new \DateTime($fin))
+            ->where("c.categorie = :categorie")            
             ->setParameter('categorie', $categorie)
-            ->orderBy('c.updatedAt', 'DESC')
+        ;   
+
+        if ($month) {            
+            if (!$year) {
+                $year = date('y');
+            }
+            $query_date = $year . '-'. $month . '-' . '01';
+            // First day of the month.
+            $debut = date('Y-m-01', strtotime($query_date));
+            // Last day of the month.
+            $fin =  date('Y-m-t', strtotime($query_date));
+            $return = $return->andWhere("c.updatedAt >= ?1")
+                    ->andWhere("c.updatedAt <= ?2")            
+                    ->setParameter(1, new \DateTime($debut))
+                    ->setParameter(2, new \DateTime($fin))
+            ;
+        }
+
+        $return = $return->orderBy('c.updatedAt', 'DESC')
             ->getQuery()
             ->getResult()
         ;
+
+        return $return;
     }
 
     public function getAllChargesFixes(CategorieCharge $categorie)

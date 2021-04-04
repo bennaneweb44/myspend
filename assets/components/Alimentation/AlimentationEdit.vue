@@ -15,6 +15,7 @@
         <div class="mt-2 mb-2">
           <input type="date" class="form-control form-control-sm text-primary mb-1" v-model="alimentationToEdit.updatedAt" value="" />
           <input type="text" class="form-control form-control-sm text-primary mb-1" v-model="alimentationToEdit.libelle" value="" placeholder="Titre" />    
+          <textarea class="form-control form-control-sm text-primary mb-1" v-model="alimentationToEdit.commentaires" value="" placeholder="Commentaires (optionnel)"></textarea> 
           <input type="number" class="form-control form-control-sm text-primary mb-1" v-model="alimentationToEdit.montant" value="" placeholder="Montant en €" />     
 
           <select v-model="idCurrentCategory" class="col-md-12 form-control form-control-sm mb-1" style="font-size: 1em; ">                  
@@ -46,14 +47,15 @@
           updatedAt: '',
           libelle: '',
           montant: 0,
-          categorie: false
+          commentaires: '',
+          categorie: false,
         },
         allCategories: {
 
         },
         selectedCategory: null,
         idCurrentCategory: 0,
-        showModal: false
+        showModal: false,
       };
     },
     components: {

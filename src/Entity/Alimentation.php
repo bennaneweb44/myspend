@@ -57,6 +57,7 @@ class Alimentation
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups("alimentation:read")
      */
     private $commentaires;
 

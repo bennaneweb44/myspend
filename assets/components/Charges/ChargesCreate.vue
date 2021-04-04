@@ -14,6 +14,7 @@
         <div class="mt-2 mb-2">
           <input type="date" class="form-control form-control-sm text-primary mb-1" v-model="chargeNew.createdAt" value="" />
           <input type="text" class="form-control form-control-sm text-primary mb-1" v-model="chargeNew.libelle" value="" placeholder="Titre" />    
+          <textarea class="form-control form-control-sm text-primary mb-1" v-model="chargeNew.commentaires" value="" placeholder="Commentaires (optionnel)"></textarea> 
           <input type="number" class="form-control form-control-sm text-primary mb-1" v-model="chargeNew.montant" value="" placeholder="Montant en €" />     
         </div>        
 
@@ -42,9 +43,10 @@
           createdAt: this.GetFormattedDate(new Date()),
           libelle: '',
           montant: '',
-          categorie: false
+          commentaires: '',
+          categorie: false,
         },                
-        showModal: false
+        showModal: false,
       };
     },
     components: {
@@ -79,7 +81,8 @@
               app.chargeNew = {   
                 createdAt: app.GetFormattedDate(new Date()),
                 libelle: '',
-                montant: ''
+                commentaires: '',
+                montant: '',
               };
               app.$emit("charge-ajoutee");
             }

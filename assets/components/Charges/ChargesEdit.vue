@@ -14,7 +14,8 @@
 
         <div class="mt-2 mb-2">
           <input type="date" class="form-control form-control-sm text-primary mb-1" v-model="chargeToEdit.updatedAt" value="" />
-          <input type="text" class="form-control form-control-sm text-primary mb-1" v-model="chargeToEdit.libelle" value="" placeholder="Titre" />    
+          <input type="text" class="form-control form-control-sm text-primary mb-1" v-model="chargeToEdit.libelle" value="" placeholder="Titre" />   
+          <textarea class="form-control form-control-sm text-primary mb-1" v-model="chargeToEdit.commentaires" value="" placeholder="Commentaires (optionnel)"></textarea>  
           <input type="number" class="form-control form-control-sm text-primary mb-1" v-model="chargeToEdit.montant" value="" placeholder="Montant en €" />     
         </div>        
 
@@ -43,8 +44,9 @@
           id: 0,          
           updatedAt: '',
           libelle: '',
+          commentaires: '',
           montant: 0,
-          categorie: false
+          categorie: false,
         },
         categorieChecked: false,
         showModal: false

@@ -72,17 +72,18 @@
           updatedAt: '',
           libelle: '',
           montant: 0,
-          categorie: null
+          commentaires: '',
+          categorie: null,
         },        
         currentDateFilter: null,
-        total: 0     
+        total: 0,
       };
     },
     components: {
       Axios,
       AlimentationEdit,
       AlimentationCreate,
-      FilterAlimentation
+      FilterAlimentation,
     },
     created() {
       let app = this;       

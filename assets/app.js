@@ -42,7 +42,7 @@ Vue.mixin({
         }
       }      
       return options;
-    }
+    },
   },
 })
 
@@ -57,7 +57,7 @@ if (document.getElementById('appCharges') !== null) {
         components: {
             ChargesList
         },
-        name: 'charges_list'
+        name: 'charges_list',
     }
   ];
 
@@ -71,8 +71,8 @@ if (document.getElementById('appCharges') !== null) {
     router: router,
     template: '<ChargesList/>',
     components: {
-      ChargesList
-    }
+      ChargesList,
+    },
   });
 }
 else if (document.getElementById('appAlimentation') !== null) {
@@ -80,9 +80,9 @@ else if (document.getElementById('appAlimentation') !== null) {
     {
       path: '/alimentation',
       components: {
-          AlimentationList
+          AlimentationList,
       },
-      name: 'alimentation_list'
+      name: 'alimentation_list',
     }
   ];
 
@@ -96,7 +96,7 @@ else if (document.getElementById('appAlimentation') !== null) {
     router: router,
     template: '<alimentationList/>',
     components: {
-      AlimentationList
-    }
+      AlimentationList,
+    },
   });
 }
