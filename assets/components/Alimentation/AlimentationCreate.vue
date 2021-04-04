@@ -94,6 +94,7 @@
               app.$toast.open({
                   message: 'Alimentation ajoutée avec succès !',
                   type: 'success',
+                  position: 'top-right',
               });
               app.$emit("alimentation-ajoutee");
             }

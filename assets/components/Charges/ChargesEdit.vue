@@ -100,6 +100,7 @@
               app.$toast.open({
                   message: 'Charge mise à jour avec succès !',
                   type: 'success',
+                  position: 'top-right',
               });
             }
 
@@ -121,6 +122,7 @@
               app.$toast.open({
                   message: 'Charge supprimée !',
                   type: 'error',
+                  position: 'top-right',
               });
               app.$emit('charge-supprimee');
             }

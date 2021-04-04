@@ -172,6 +172,7 @@
         app.$toast.open({
             message: 'Filtrage par date désactivé !',
             type: 'warning',
+            position: 'top-right',
         });
         app.getAlimentationList();
       }

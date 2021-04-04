@@ -162,6 +162,7 @@
         app.$toast.open({
             message: 'Filtre appliqué : ' + app.selectedMois + '/' + app.selectedAnnee + ' !',
             type: 'succès',
+            position: 'top-right',
         });
 
         app.hideModal();

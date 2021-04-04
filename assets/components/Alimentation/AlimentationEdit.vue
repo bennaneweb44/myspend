@@ -117,6 +117,7 @@
               app.$toast.open({
                   message: 'Alimentation mise à jour avec succès !',
                   type: 'success',
+                  position: 'top-right',
               });
               app.$emit('alimentation-modifiee');
             }
@@ -139,6 +140,7 @@
               app.$toast.open({
                   message: 'Alimentation supprimée !',
                   type: 'error',
+                  position: 'top-right',
               });
               app.$emit('alimentation-supprimee');
             }

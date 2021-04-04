@@ -88,6 +88,7 @@
               app.$toast.open({
                   message: 'Charge ajoutée avec succès !',
                   type: 'success',
+                  position: 'top-right',
               });
 
               app.$emit("charge-ajoutee");
