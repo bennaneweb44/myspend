@@ -3,14 +3,19 @@
     
     <div class="row col-md-12 mb-5">
 
-      <div class="col-md-4 col-sm-4 col-2 text-left">
-        <b-button v-b-modal.filter-alimentation 
-          class="fa fa-filter pull-left p-1 btnCreate"
-          style="float: left; width: 60%"           
-          title="Filtrer par date">                    
-          <input type="text" v-model="currentDateFilter" disabled class="disabled" style="background-color: transparent; border: none; font-weight: bold; font-family: inherit;" />                   
-        </b-button>        
-        <a v-show="currentDateFilter" @click.prevent="deleteDateFilter()" style="margin-left: 1.2em; font-size: 1.5em; cursor: pointer; color: darkred"><i class="fa fa-close"></i></a>        
+      <div class="col-md-4 col-sm-4 col-2">
+          <b-button v-b-modal.filter-alimentation 
+            v-show="!currentDateFilter"
+            class="fa fa-filter pull-left p-1 btnFilter" 
+            title="Filtrer par date"
+            style="margin-left: 25px;">              
+          </b-button>          
+          <div class="disabled" style="margin-top: -5px !important">                       
+            <a v-show="currentDateFilter" @click.prevent="deleteDateFilter()" class="" style="padding-left: 25px; padding-right: 10px; font-size: 1.5em; cursor: pointer; color: darkred">
+              <i class="fa fa-times-circle" title="Supprimer filtre"></i>  
+            </a>
+             <input type="text" v-model="currentDateFilter" disabled style="width: 45% !important; background-color: transparent; border: none; font-size: 1.2em; font-weight: bold; font-family: inherit;" />
+          </div>
       </div>
 
       <div class="col-md-4 col-sm-4 col-8 text-center">
@@ -206,13 +211,21 @@
     font-size: 1.7em;
   }
 
-  .btnCreate, .btnCreate:hover, .btnCreate:active, .btnCreate:enabled {
-    background-color: transparent; 
-    color: #000; 
+  .btnCreate, .btnCreate:hover, .btnCreate:active, .btnCreate:enabled,
+  .btnFilter, .btnFilter:hover, .btnFilter:active, .btnFilter:enabled {
+    background-color: transparent;     
     border: none; 
     font-size: 1.5em; 
     cursor: pointer;
     border: none !important;
+  }
+
+  .btnFilter {
+    color: #000; 
+  }
+
+  .btnCreate {
+    color: #1A7D0F; 
   }
   
 </style>
