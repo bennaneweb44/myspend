@@ -62,6 +62,13 @@ class Charges
      */
     private $commentaires;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="charges")
+     * @ORM\JoinColumn(nullable=false)
+     * @Groups("charge:read")
+     */
+    private $user;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -147,6 +154,18 @@ class Charges
     public function setCommentaires(?string $commentaires): self
     {
         $this->commentaires = $commentaires;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

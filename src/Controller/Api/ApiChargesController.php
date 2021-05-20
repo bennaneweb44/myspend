@@ -3,6 +3,7 @@
 namespace App\Controller\Api;
 
 use App\Entity\Charges;
+use App\Entity\User;
 use App\Repository\CategorieChargeRepository;
 use App\Repository\ChargesRepository;
 use DateTime;
@@ -11,6 +12,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Security;
 
 class ApiChargesController extends AbstractController
 {
@@ -18,65 +21,85 @@ class ApiChargesController extends AbstractController
     private $normalizerInterface;
     private $categorieChargeRepository;
     private $entityManager;
+    private $tokenStorage;
+    private $user;
 
     public function __construct(ChargesRepository $chargesRepository, 
                                 CategorieChargeRepository $categorieChargeRepository, 
                                 NormalizerInterface $normalizerInterface,
-                                EntityManagerInterface $entityManager)
+                                EntityManagerInterface $entityManager,
+                                TokenStorageInterface $tokenStorage,
+                                Security $security)
     {
         $this->chargesRepository = $chargesRepository;
         $this->categorieChargeRepository = $categorieChargeRepository;
         $this->normalizerInterface = $normalizerInterface;
         $this->entityManager = $entityManager;
+        $this->tokenStorage = $tokenStorage;        
+        $this->user = $security->getUser();
     }
     
-    public function index(): JsonResponse
+    public function index(): ?JsonResponse
     {
-        // Get all items of this mounth        
-        $categorieVariables = $this->categorieChargeRepository->findOneBy(['id' => 2]);
-        $chargesMensuelles = $this->chargesRepository->getAllChargesVariablesByMonth($categorieVariables);        
+        if ($this->user instanceof User) {
+            // Get all items of this mounth        
+            $categorieVariables = $this->categorieChargeRepository->findOneBy(['id' => 2]);            
+            $chargesMensuelles = $this->chargesRepository->getAllChargesVariablesByMonth($categorieVariables, $this->user);        
 
-        // Get all <Charges fixes>
-        $categorieFixes = $this->categorieChargeRepository->findOneBy(['id' => 1]);                
-        $chargesFixes = $this->chargesRepository->getAllChargesFixes($categorieFixes);
+            // Get all <Charges fixes>
+            $categorieFixes = $this->categorieChargeRepository->findOneBy(['id' => 1]);                
+            $chargesFixes = $this->chargesRepository->getAllChargesFixes($categorieFixes, $this->user);
 
-        // Json
-        $union = array_merge($chargesMensuelles, $chargesFixes);
-        $chargesNormalises = $this->normalizerInterface->normalize(
-            $union, 
-            'json', 
-            ['groups' => ['charge:read', 'CategorieCharge:read']]
-        );
+            // Json
+            $union = array_merge($chargesMensuelles, $chargesFixes);
+            $chargesNormalises = $this->normalizerInterface->normalize(
+                $union, 
+                'json', 
+                ['groups' => ['charge:read', 'CategorieCharge:read']]
+            );
 
-        // Json response
-        $response = new JsonResponse(json_encode($chargesNormalises), 200, [], true);
+            // Json response
+            $response = new JsonResponse(json_encode($chargesNormalises), 200, [], true);
+            
+            return $response;
+
+        } else {
+            $this->killUserSessionAndRedirectToLogin();      
+        }
         
-        return $response;
+        return null;
     }
 
-    public function listByDate($annee, $mois) : JsonResponse
+    public function listByDate($annee, $mois): ?JsonResponse
     {
-        // Get all items of this mounth        
-        $categorieVariables = $this->categorieChargeRepository->findOneBy(['id' => 2]);
-        $chargesMensuelles = $this->chargesRepository->getAllChargesVariablesByMonth($categorieVariables, $mois, $annee);
+        if ($this->user instanceof User) {
+            // Get all items of this mounth        
+            $categorieVariables = $this->categorieChargeRepository->findOneBy(['id' => 2]);
+            $chargesMensuelles = $this->chargesRepository->getAllChargesVariablesByMonth($categorieVariables, $this->user, $mois, $annee);
 
-        // Get all <Charges fixes>
-        $categorieFixes = $this->categorieChargeRepository->findOneBy(['id' => 1]);
-        $chargesFixes = $this->chargesRepository->getAllChargesFixes($categorieFixes);
+            // Get all <Charges fixes>
+            $categorieFixes = $this->categorieChargeRepository->findOneBy(['id' => 1]);
+            $chargesFixes = $this->chargesRepository->getAllChargesFixes($categorieFixes, $this->user);
 
-        // Json
-        $union = array_merge($chargesMensuelles, $chargesFixes);
+            // Json
+            $union = array_merge($chargesMensuelles, $chargesFixes);
 
-        $chargesNormalises = $this->normalizerInterface->normalize(
-            $union, 
-            'json', 
-            ['groups' => ['charge:read', 'CategorieCharge:read']]
-        );
+            $chargesNormalises = $this->normalizerInterface->normalize(
+                $union, 
+                'json', 
+                ['groups' => ['charge:read', 'CategorieCharge:read']]
+            );
 
-        // Json response
-        $response = new JsonResponse(json_encode($chargesNormalises), 200, [], true);
-        
-        return $response;
+            // Json response
+            $response = new JsonResponse(json_encode($chargesNormalises), 200, [], true);
+            
+            return $response;
+
+        } else {
+            $this->killUserSessionAndRedirectToLogin();
+        }
+
+        return null;
     }
     
     public function update($id, Request $request)
@@ -90,6 +113,11 @@ class ApiChargesController extends AbstractController
             $charge = $this->chargesRepository->findOneBy([
                 'id' => $id
             ]);
+
+            // Seul le titulaire peut modifier
+            if (!$this->user instanceof User || $charge->getUser() != $this->user) {
+                $this->killUserSessionAndRedirectToLogin();
+            }
 
             // Error
             if (!$charge || !($charge instanceof Charges)) {
@@ -147,6 +175,10 @@ class ApiChargesController extends AbstractController
             $montant = $arrCharge['montant'];
             $commentaires = $arrCharge['commentaires'];
 
+            if (!$this->user instanceof User) {
+                $this->killUserSessionAndRedirectToLogin();
+            }
+
             // Object
             $charge = new Charges();
             $charge->setCreatedAt($createdAt);
@@ -154,6 +186,7 @@ class ApiChargesController extends AbstractController
             $charge->setLibelle($libelle);
             $charge->setMontant($montant);
             $charge->setCommentaires($commentaires);
+            $charge->setUser($this->user);
 
             // Catégorie
             $idCategorie = $arrCharge['categorie'] == true ? 1 : 2;
@@ -187,6 +220,12 @@ class ApiChargesController extends AbstractController
         
         // Suppression
         if ($charge && $charge instanceof Charges) {
+
+            // Seul le titulaire peut modifier
+            if (!$this->user instanceof User || $charge->getUser() != $this->user) {
+                $this->killUserSessionAndRedirectToLogin();
+            }
+
             $this->entityManager->remove($charge);
             $this->entityManager->flush();
         } else {
@@ -200,5 +239,15 @@ class ApiChargesController extends AbstractController
         ]), 200, [], true);             
 
         return $response;
+    }
+
+    /**************************************************
+    ************ PRIVATE FUNCTIONS ********************
+    ***************************************************/
+
+    private function killUserSessionAndRedirectToLogin()
+    {
+        $this->tokenStorage->setToken(null);
+        $this->redirectToRoute('app_login');
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Alimentation;
+use App\Entity\User;
 use App\Entity\CategorieAlimentation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -49,7 +50,7 @@ class AlimentationRepository extends ServiceEntityRepository
     }
     */
 
-    public function getAllByMonth($month, $year = null) 
+    public function getAllByMonth(User $user, $month, $year = null) 
     {    
         if (!$year) {
             $year = date('y');
@@ -66,9 +67,11 @@ class AlimentationRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('a')
             ->select()
             ->where("a.updatedAt >= ?1")
-            ->andWhere("a.updatedAt <= ?2")            
+            ->andWhere("a.updatedAt <= ?2")       
+            ->andWhere("a.user = ?3")     
             ->setParameter(1, new \DateTime($debut))
             ->setParameter(2, new \DateTime($fin))
+            ->setParameter(3, $user)
             ->orderBy('a.updatedAt', 'DESC')
             ->getQuery()
             ->getResult()

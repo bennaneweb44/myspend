@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\CategorieCharge;
 use App\Entity\Charges;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -49,12 +50,14 @@ class ChargesRepository extends ServiceEntityRepository
     }
     */
 
-    public function getAllChargesVariablesByMonth(CategorieCharge $categorie, $month = null, $year = null) 
+    public function getAllChargesVariablesByMonth(CategorieCharge $categorie, User $user, $month = null, $year = null) 
     {
         $return = $this->createQueryBuilder('c')
             ->select()
-            ->where("c.categorie = :categorie")            
+            ->where("c.categorie = :categorie") 
+            ->andWhere("c.user = :user")            
             ->setParameter('categorie', $categorie)
+            ->setParameter('user', $user)
         ;   
 
         if ($month) {            
@@ -81,12 +84,14 @@ class ChargesRepository extends ServiceEntityRepository
         return $return;
     }
 
-    public function getAllChargesFixes(CategorieCharge $categorie)
+    public function getAllChargesFixes(CategorieCharge $categorie, User $user)
     {
         return $this->createQueryBuilder('c')
             ->select()
             ->where("c.categorie = :categorie")
+            ->andWhere("c.user = :user")  
             ->setParameter('categorie', $categorie)
+            ->setParameter('user', $user)
             ->orderBy('c.updatedAt', 'DESC')
             ->getQuery()
             ->getResult()

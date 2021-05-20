@@ -16,6 +16,10 @@ security:
     main:
       anonymous: lazy
       provider: app_user_provider
+      remember_me:
+        secret:   '%kernel.secret%'
+        lifetime: 604800 # 1 week in seconds
+        path:     /
       guard:
         authenticators:
           - App\Security\LoginFormAuthenticator
@@ -24,4 +28,5 @@ security:
         target: /
   access_control:
     - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/registration, roles: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/, roles: ROLE_USER }

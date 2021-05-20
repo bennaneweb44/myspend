@@ -2,11 +2,20 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @UniqueEntity(
+ *     fields={"email"},
+ *     message="Cet e-mail existe déjà"
+ * )
  */
 class User implements UserInterface
 {
@@ -35,6 +44,9 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(
+     *      message="Le nom ne peut être vide"
+     * )
      */
     private $name;
 
@@ -52,6 +64,22 @@ class User implements UserInterface
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $deletedAt;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Charges::class, mappedBy="user_id")
+     */
+    private $charges;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Alimentation::class, mappedBy="user_id")
+     */
+    private $alimentations;
+
+    public function __construct()
+    {
+        $this->charges = new ArrayCollection();
+        $this->alimentations = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -170,6 +198,66 @@ class User implements UserInterface
     public function setDeletedAt(?\DateTimeInterface $deletedAt): self
     {
         $this->deletedAt = $deletedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Charges[]
+     */
+    public function getCharges(): Collection
+    {
+        return $this->charges;
+    }
+
+    public function addCharge(Charges $charge): self
+    {
+        if (!$this->charges->contains($charge)) {
+            $this->charges[] = $charge;
+            $charge->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCharge(Charges $charge): self
+    {
+        if ($this->charges->removeElement($charge)) {
+            // set the owning side to null (unless already changed)
+            if ($charge->getUserId() === $this) {
+                $charge->setUserId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Alimentation[]
+     */
+    public function getAlimentations(): Collection
+    {
+        return $this->alimentations;
+    }
+
+    public function addAlimentation(Alimentation $alimentation): self
+    {
+        if (!$this->alimentations->contains($alimentation)) {
+            $this->alimentations[] = $alimentation;
+            $alimentation->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAlimentation(Alimentation $alimentation): self
+    {
+        if ($this->alimentations->removeElement($alimentation)) {
+            // set the owning side to null (unless already changed)
+            if ($alimentation->getUserId() === $this) {
+                $alimentation->setUserId(null);
+            }
+        }
 
         return $this;
     }

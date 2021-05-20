@@ -1,42 +1,111 @@
 {# templates/registration/index.html.twig #} 
 {% extends 'base.html.twig' %} 
-{% block body %}
-    <div class="container">
-        <div class="row">
-            <div class="card bg-light mb-3 mt-5" style="width: 100%">
-                <div class="card-body">
-                    <div class="card-header mb-3"><i class="fa fa-user-plus"></i> Inscription</div>
-                    {{ form_start(form) }}
-                    <div class="form_group">
-                        <div class="col-md-12 mb-3">
-                            {{ form_row(form.name, {'attr': {'class': 'form-control'}, 'label' : 'Nom'}) }}
+{% block body %}   
+    <div class="d-flex justify-content-center">
+        <div class="user_card">
+            <div class="d-flex justify-content-center">
+                <div class="brand_logo_container">                    
+                    <img src="{{ asset('/build/images/register.jpeg') }}" class="brand_logo" alt="Logo">       
+                </div>                
+            </div>            
+            <div class="d-flex justify-content-center form_container" style="padding: 1em;">    
+                {{ form_start(form,  {'attr': {'id':'formInscription', 'class': 'width100'}}) }}
+
+                    {% if form.name.vars.errors|length %}
+                        <div class="text-danger" style="height: 1.7em; padding: -0.5em 0.8em -1.5em 0.8em">
+                            <i class="fa fa-exclamation-triangle"></i> {{ form_errors(form.name, {'attr': {'class': 'inlineError'}}) }}
                         </div>
-                    </div>
-                    <div class="form_group">
-                        <div class="col-md-12 mb-3">
-                            {{ form_row(form.email, {'attr': {'class': 'form-control'}, 'label' : 'E-mail'}) }}
+                    {% endif %}
+
+                    {% if form.email.vars.errors|length %}
+                        <div class="text-danger" style="height: 1.7em; padding: -0.5em 0.8em -1.5em 0.8em">
+                            <i class="fa fa-exclamation-triangle"></i> {{ form_errors(form.email, {'attr': {'class': 'inlineError'}}) }}
                         </div>
-                    </div>
-                    <div class="form_group">
-                        <div class="col-md-12 mb-3">
-                            {{ form_row(form.password.first, {'attr': {'class': 'form-control'}, 'label' : 'Mot de passe'}) }}
+                    {% endif %}
+
+                    {% if form.password.first.vars.errors|length %}
+                        <div class="text-danger" style="height: 1.8em; padding: -0.5em 0.8em -1.5em 0.8em">
+                            <i class="fa fa-exclamation-triangle"></i> {{ form_errors(form.password.first, {'attr': {'class': 'inlineError'}}) }}
                         </div>
-                    </div>
-                    <div class="form_group">
-                        <div class="col-md-12 mb-3">
-                            {{ form_row(form.password.second, {'attr': {'class': 'form-control'}, 'label' : 'Confirmation'}) }}
+                    {% endif %}                    
+
+                    <div class="input-group mb-3" >
+                        <div class="input-group-append ">
+                            <span class="input-group-text" style="padding: 0.7em"><i class="fa fa-user"></i></span>
                         </div>
+                        {{ form_row(form.name, {'attr': {'class': 'form-control input_user', 'placeholder' : 'Nom d\'utilisateur', 'type': 'text'}, 'label' : false}) }}
                     </div>
-                    <div class="form-group">
-                        <div class="col-md-12" style="margin-top:5px;">
-                            <button type="submit" class="btn btn-primary" style="width: 100%">
-                                <i class="fa fa-check"></i> S'inscrire
-                            </button>
+
+                    <div class="input-group mb-3" >
+                        <div class="input-group-append ">
+                            <span class="input-group-text" style="padding: 0.65em"><i class="fa fa-at"></i></span>
                         </div>
+                        {{ form_row(form.email, {'attr': {'class': 'form-control', 'placeholder' : 'Ex : nom@domaine.fr', 'type': 'email'}, 'label' : false}) }}
                     </div>
-                    {{ form_end(form) }}
-                </div>
-            </div>
+
+                    <div class="input-group mb-3" >
+                        <div class="input-group-append ">
+                            <span class="input-group-text" style="padding: 0.55em"><i class="fa fa-key"></i></span>
+                        </div>
+                        {{ form_row(form.password.first, {'attr': {'class': 'form-control', 'placeholder' : 'Mot de passe'}, 'label' : false}) }}
+                    </div>
+
+                    <div class="input-group mb-3" >
+                        <div class="input-group-append ">
+                            <span class="input-group-text" style="padding: 0.55em"><i class="fa fa-key"></i></span>
+                        </div>
+                        {{ form_row(form.password.second, {'attr': {'class': 'form-control', 'placeholder' : 'Confirmation'}, 'label' : false}) }}
+                    </div>
+
+                    <div class="d-flex justify-content-center mt-3 mb-3 login_container">
+                        <button type="submit" name="button" class="btn btn-primary login_btn" style="width: 99%; margin-left: -5px">
+                            <span class="fa fa-user-plus" id="spanLoader"></span> S'nscrire
+                        </button>
+                    </div>
+                    
+                {{ form_end(form) }}                                                  
+            </div>            
         </div>
-    </div>    
+    </div>
+{% endblock %}
+
+{% block css %}
+    <style>
+        /* Message d'erreur du formulaire d'inscription */
+        .form_group > .col-md-12.mb-3 > div > ul > li {
+            color: darkred !important;
+        }
+        form[name=user] {
+            width: -webkit-fill-available;
+        }
+        .width100 {
+            width: 100% !important;
+            padding: auto !important;
+        }   
+        .input-group.mb-3 div:nth-child(2) {
+            width: 89% !important;
+        }     
+        /* Portable */
+        @media all and (max-device-width: 480px)
+        {
+            .input-group.mb-3 div:nth-child(2) {
+                width: 86% !important;
+            }
+            form[name=user] > div > .fa.fa-exclamation-triangle {
+                margin-right: 0.8em !important;
+            }
+        }
+
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    $(document).ready(function() {                        
+        $('#formInscription').on('submit', function() {                              
+                $('#spanLoader').removeClass('fa-user-plus');
+                $('#spanLoader').addClass('loaderButton');
+        });
+    });
+</script>
 {% endblock %}

@@ -1,4 +1,4 @@
-'Invalid credentials.': 'Identifiants incorrects.'
-'Email could not be found.': 'Cet email nexiste pas.'
-'Invalid CSRF token.': 'Session invalide. Merci de rééssayer.'
+"Invalid credentials.": "Identifiants incorrects."
+"Email could not be found.": "Cet email n'existe pas."
+"Invalid CSRF token.": "Session invalide. Merci de rééssayer."
 
