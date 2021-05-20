@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -42,8 +43,13 @@ class RegistrationController extends AbstractController
 
             // Save
             $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
+
+            try {
+                $em->persist($user);
+                $em->flush();
+            } catch(Exception $ex) {
+                throw new Exception('Une erreur est survenue lors de l\'enregistrement !');
+            }            
 
             return $this->redirectToRoute('app_login');
         }

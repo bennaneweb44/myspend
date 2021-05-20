@@ -3,6 +3,7 @@
 namespace App\Controller\Api;
 
 use App\Entity\Alimentation;
+use App\Entity\User;
 use App\Entity\CategorieAlimentation;
 use App\Repository\CategorieAlimentationRepository;
 use App\Repository\AlimentationRepository;
@@ -12,6 +13,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Security;
 
 class ApiAlimentationController extends AbstractController
 {
@@ -19,69 +22,89 @@ class ApiAlimentationController extends AbstractController
     private $normalizerInterface;
     private $categorieAlimentationRepository;
     private $entityManager;
+    private $tokenStorage;
+    private $user;
 
     public function __construct(AlimentationRepository $alimentationRepository, 
                                 CategorieAlimentationRepository $categorieAlimentationRepository, 
                                 NormalizerInterface $normalizerInterface,
-                                EntityManagerInterface $entityManager)
+                                EntityManagerInterface $entityManager,
+                                TokenStorageInterface $tokenStorage,
+                                Security $security)
     {
         $this->alimentationRepository = $alimentationRepository;
         $this->categorieAlimentationRepository = $categorieAlimentationRepository;
         $this->normalizerInterface = $normalizerInterface;
         $this->entityManager = $entityManager;
+        $this->tokenStorage = $tokenStorage;        
+        $this->user = $security->getUser();
     }
     
-    public function index(): JsonResponse
+    public function index(): ?JsonResponse
     {
-        // Get current mounth
-        $month = date('m');        
+        if ($this->user instanceof User) {
+            // Get current mounth
+            $month = date('m');        
 
-        // Get all items of this mounth   
-        $alimentations = $this->alimentationRepository->getAllByMonth($month);        
+            // Get all items of this mounth   
+            $alimentations = $this->alimentationRepository->getAllByMonth($this->user, $month);        
 
-        // Json        
-        $data = [];
+            // Json        
+            $data = [];
 
-        $alimentationsNormalises = $this->normalizerInterface->normalize(
-            $alimentations, 
-            'json', 
-            ['groups' => ['alimentation:read', 'CategorieAlimentation:read']]
-        );
-        $data['alimentations'] = $alimentationsNormalises;
+            $alimentationsNormalises = $this->normalizerInterface->normalize(
+                $alimentations, 
+                'json', 
+                ['groups' => ['alimentation:read', 'CategorieAlimentation:read']]
+            );
+            $data['alimentations'] = $alimentationsNormalises;
 
-        // Toutes les catégories
-        $allCategories = $this->categorieAlimentationRepository->findAll();
+            // Toutes les catégories
+            $allCategories = $this->categorieAlimentationRepository->findAll();
 
-        $allCategoriesNormalises = $this->normalizerInterface->normalize(
-            $allCategories, 
-            'json', 
-            ['groups' => ['CategorieAlimentation:read']]
-        );
+            $allCategoriesNormalises = $this->normalizerInterface->normalize(
+                $allCategories, 
+                'json', 
+                ['groups' => ['CategorieAlimentation:read']]
+            );
 
-        $data['allCategories'] = $allCategoriesNormalises;
+            $data['allCategories'] = $allCategoriesNormalises;
 
-        // Json response
-        $response = new JsonResponse(json_encode($data), 200, [], true);
-        
-        return $response;
+            // Json response
+            $response = new JsonResponse(json_encode($data), 200, [], true);
+            
+            return $response;
+
+        } else {
+            $this->killUserSessionAndRedirectToLogin();
+        }
+
+        return null;        
     }
 
-    public function listByDate($annee, $mois) : JsonResponse
+    public function listByDate($annee, $mois) : ?JsonResponse
     {
-        // Get all items of this mounth   
-        $alimentations = $this->alimentationRepository->getAllByMonth($mois, $annee);   
+        if ($this->user instanceof User) {
+            // Get all items of this mounth   
+            $alimentations = $this->alimentationRepository->getAllByMonth($this->user, $mois, $annee);   
 
-        // Json        
-        $alimentationsNormalises = $this->normalizerInterface->normalize(
-            $alimentations, 
-            'json', 
-            ['groups' => ['alimentation:read', 'CategorieAlimentation:read']]
-        );
+            // Json        
+            $alimentationsNormalises = $this->normalizerInterface->normalize(
+                $alimentations, 
+                'json', 
+                ['groups' => ['alimentation:read', 'CategorieAlimentation:read']]
+            );
 
-        // Json response
-        $response = new JsonResponse(json_encode($alimentationsNormalises), 200, [], true);
-        
-        return $response;
+            // Json response
+            $response = new JsonResponse(json_encode($alimentationsNormalises), 200, [], true);
+            
+            return $response;
+
+        } else {
+            $this->killUserSessionAndRedirectToLogin();
+        }
+
+        return null;        
     }
 
     public function update($id, Request $request)
@@ -96,6 +119,11 @@ class ApiAlimentationController extends AbstractController
             $alimentation = $this->alimentationRepository->findOneBy([
                 'id' => $id
             ]);
+
+            // Seul le titulaire peut modifier
+            if (!$this->user instanceof User || $alimentation->getUser() != $this->user) {
+                $this->killUserSessionAndRedirectToLogin();
+            }
 
             // Error
             if (!$alimentation || !($alimentation instanceof Alimentation)) {
@@ -154,6 +182,10 @@ class ApiAlimentationController extends AbstractController
             $montant = $arrAlimentation['montant'];
             $commentaires = $arrAlimentation['commentaires'];
 
+            if (!$this->user instanceof User) {
+                $this->killUserSessionAndRedirectToLogin();
+            }
+
             // Object
             $alimentation = new Alimentation();
             $alimentation->setCreatedAt($createdAt);
@@ -161,6 +193,7 @@ class ApiAlimentationController extends AbstractController
             $alimentation->setLibelle($libelle);
             $alimentation->setMontant($montant);
             $alimentation->setCommentaires($commentaires);
+            $alimentation->setUser($this->user);
 
             // Catégorie
             $idCategorie = $arrAlimentation['idCategorie'];
@@ -195,6 +228,12 @@ class ApiAlimentationController extends AbstractController
             
             // Suppression
             if ($alimentation && $alimentation instanceof Alimentation) {
+
+                // Seul le titulaire peut modifier
+                if (!$this->user instanceof User || $alimentation->getUser() != $this->user) {
+                    $this->killUserSessionAndRedirectToLogin();
+                }
+
                 $this->entityManager->remove($alimentation);
                 $this->entityManager->flush();
             } else {
@@ -232,5 +271,14 @@ class ApiAlimentationController extends AbstractController
         }
 
         return null;
+    }
+
+    /**************************************************
+    ************ PRIVATE FUNCTIONS ********************
+    ***************************************************/
+    private function killUserSessionAndRedirectToLogin()
+    {
+        $this->tokenStorage->setToken(null);
+        $this->redirectToRoute('app_login');
     }
 }

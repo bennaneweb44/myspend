@@ -61,6 +61,13 @@ class Alimentation
      */
     private $commentaires;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="alimentations")
+     * @ORM\JoinColumn(nullable=false)
+     * @Groups("alimentation:read")
+     */
+    private $user;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -146,6 +153,18 @@ class Alimentation
     public function setCommentaires(?string $commentaires): self
     {
         $this->commentaires = $commentaires;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

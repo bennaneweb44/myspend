@@ -12,7 +12,12 @@
 
         <style>
             * {
-                font-size: 26px;
+                font-size: 21px;                
+            }
+
+            body {
+                background: url({{ asset('/build/images/background.jpeg') }}) !important;
+                background-size: cover !important;
             }
             .container-fluid {
                 width: 90%;
@@ -41,9 +46,9 @@
     </head>
 
     <body>        
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light" id="navPrincipale">
             <a class="navbar-brand" href="{{ path('home') }}"><i class="fa fa-database"></i> MySpend</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" style="border: none !important; padding: 0 !important" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
@@ -51,15 +56,15 @@
                 <ul class="navbar-nav mr-auto">
                     {% if app.user %}
                         <li class="nav-item">
-                            <a class="nav-link" href={{ path('charges_list') }}>Charges</a>
+                            <a class="nav-link" href={{ path('charges_list') }}><i class="fa fa-sort-amount-asc"></i> Charges</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href={{ path('alimentation_list') }}>Alimentation</a>
+                            <a class="nav-link" href={{ path('alimentation_list') }}><i class="fa fa-cutlery"></i> Alimentation</a>
                         </li>
-                    {% endif %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Paramètres</a>
-                    </li>                    
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"><i class="fa fa-gear"></i> Paramètres</a>
+                        </li> 
+                    {% endif %}                                       
                 </ul>
                 <hr class="d-none d-sm-block" />
                 <ul class="nav navbar-nav navbar-right">
@@ -77,9 +82,11 @@
             </div>
         </nav>
 
-        <div class="container-fluid" style="border: 1px solid silver; height:60px;">                                    
-            {% block body %}{% endblock %}                    
+            
+        <div class="container">            
+            {% block body %}{% endblock %}                                
         </div>
+        
 
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>

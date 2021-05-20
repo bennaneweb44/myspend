@@ -20,11 +20,15 @@
                     {% elseif app.user is not null and app.user is defined %}
                         
                         <div class="col-sm-6 col-12 bg-default" style="padding: 0.2em">
-                            <a class="btn btn-success" href="{{ path('charges_list') }}" role="button" style="width: 100%">Charges fixes</a>                                                                                                           
+                            <a class="btn btn-success" href="{{ path('charges_list') }}" role="button" style="width: 100%">
+                                <i class="fa fa-sort-amount-asc"></i> Charges fixes
+                            </a>                                                                                                           
                         </div>
                                                                         
                         <div class="col-sm-6 col-12 bg-default" style="padding: 0.2em">
-                            <a class="btn btn-info" href="{{ path('alimentation_list') }}" role="button" style="width: 100%">Alimentation</a>     
+                            <a class="btn btn-info" href="{{ path('alimentation_list') }}" role="button" style="width: 100%">
+                                <i class="fa fa-cutlery"></i> Alimentation
+                            </a>     
                         </div>
                         
                     {% endif %}

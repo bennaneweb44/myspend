@@ -20,7 +20,7 @@ class UserType extends AbstractType
             ->add('name', TextType::class)
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
-                'invalid_message' => 'Les deux mots de passe ne correspondent pas.',                
+                'invalid_message' => 'Mots de passe incohérents.',                
                 'first_options' => ['label' => 'Mot de passe'],
                 'second_options' => ['label' => 'Confirmation']
             ])

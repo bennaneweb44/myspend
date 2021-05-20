@@ -207,8 +207,8 @@
     background-color: transparent; 
     border: none; 
     margin-top: -5px;
-    margin-right: -35px;
-    font-size: 1.7em;
+    margin-right: -25px;
+    font-size: 1.2em;
   }
 
   .btnCreate, .btnCreate:hover, .btnCreate:active, .btnCreate:enabled,
