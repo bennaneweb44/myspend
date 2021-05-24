@@ -175,7 +175,4 @@
   .center {
     text-align: center;
   }
-  h5.card-title, h5.card-title > i {
-    font-size: 26px !important;
-  }
 </style>

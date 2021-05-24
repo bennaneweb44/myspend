@@ -19,10 +19,13 @@
                 background: url({{ asset('/build/images/background.jpeg') }}) !important;
                 background-size: cover !important;
             }
-            .container-fluid {
-                width: 90%;
-                margin-left: 5%;
-                margin-right: 5%;
+
+            h5.card-title, h5.card-title > i {
+                font-size: 20px !important;
+            }
+
+            input[disabled=disabled] {
+                color: whitesmoke !important;
             }
 
             /* Portable */
@@ -30,12 +33,23 @@
             {
                 * {
                     font-size: 36px;
+                }  
+                .container {
+                    max-width: 900px;
+                } 
+                .colxs6 {
+                    min-width: 50% !important;      
+                }      
+                .categorieDiv {
+                    bottom: 0.8em !important; 
+                    left: 0.7em !important;
                 }
-                .container-fluid {
-                    width: 95%;
-                    margin-left: 2%;
-                    margin-right: 2%;
+                .categorieLabel {
+                    font-size: 32px !important;
                 }   
+                h5.card-title, h5.card-title > i {
+                    font-size: 32px !important;
+                }      
             }
 
         </style>

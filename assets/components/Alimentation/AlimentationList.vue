@@ -31,7 +31,7 @@
     </div>
     
     
-    <div v-for="alimentation in alimentations" :key="alimentation.id" class="card col-lg-4 col-sm-6" style="border: none; background-color: transparent; padding: 5px 10px 30px 25px ">
+    <div v-for="alimentation in alimentations" :key="alimentation.id" class="card col-4 colxs6">
       <!-- background-color: #BAADCD !important; -->
       <div class="card-body bg-info" style="border: 3px solid #000; border-radius: 12px; padding-top: 15px; padding-left: 15px;">          
           <h5 class="card-title" style="font-size: 1.5em;">              
@@ -41,11 +41,13 @@
               title="Modifer"></b-button>
           </h5>            
           <p class="card-text">{{ alimentation.libelle }}</p>  
-          <div class="text-left">
-            <label href="#" class="btn-default pl-1 pr-1 " style="left: 0; border: 1px solid #000" ><i :class="alimentation.categorie.icone"></i> {{ alimentation.categorie.label }}</label>                     
-          </div>
           
-          <label href="#" class="btn-primary pl-1 pr-1 montantVignette" style="margin-right: 13px; margin-bottom: 42px" >{{ parseFloat(alimentation.montant).toFixed(2).toString().replace(".", ",") }} €</label>            
+          <div class="text-right">
+            <div class="text-left categorieDiv">
+              <label href="#" class="btn-default pl-1 pr-1 categorieLabel"><i :class="alimentation.categorie.icone"></i> {{ alimentation.categorie.label }}</label>                                               
+            </div>                        
+            <label href="#" class="btn-primary pl-1 pr-1 montantVignette pull-right" style="margin-right: 13px; margin-bottom: 42px" >{{ parseFloat(alimentation.montant).toFixed(2).toString().replace(".", ",") }} €</label>            
+          </div>
       </div>
     </div>       
 
@@ -189,19 +191,12 @@
   .center {
     text-align: center;
   }
-  h5.card-title, h5.card-title > i {
-    font-size: 26px !important;
-  }  
   .montantVignette {
     position: absolute;
     bottom: 0;
     right: 10px;
     border-radius: 12px;
   }
-
-  /*.alimentationFixe {
-    background-color: #18bc9c !important;
-  }*/
 
   .btnEdit, .btnEdit:hover, .btnEdit:active, .btnEdit:enabled {
     background-color: transparent; 
@@ -226,6 +221,25 @@
 
   .btnCreate {
     color: #1A7D0F; 
+  }
+
+  .categorieDiv {
+    position: absolute; 
+    bottom: 1.4em; 
+    left: 1.2em;
+  }
+
+  .categorieLabel {
+    left: 0; 
+    border: 1.5px solid #000; 
+    border-radius: 15px; 
+    font-size: 18px;
+  }
+
+  .colxs6 {
+    border: none; 
+    background-color: transparent; 
+    padding: 5px 10px 30px 25px;
   }
   
 </style>

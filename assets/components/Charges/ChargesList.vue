@@ -8,7 +8,7 @@
             v-show="!currentDateFilter"
             class="fa fa-filter pull-left p-1 btnFilter" 
             title="Filtrer par date"
-            style="margin-left: 25px;">
+            style="margin-left: 25px; color: whitesmoke !important">
           </b-button>          
           <div class="disabled" style="margin-top: -5px !important">                       
             <a v-show="currentDateFilter" @click.prevent="deleteDateFilter()" class="" style="padding-left: 25px; padding-right: 10px; font-size: 1.5em; cursor: pointer; color: darkred">
@@ -31,7 +31,7 @@
     </div>
     
     
-    <div v-for="charge in charges" :key="charge.id" class="card col-lg-4 col-sm-6" style="border: none; background-color: transparent; padding: 5px 10px 30px 25px ">
+    <div v-for="charge in charges" :key="charge.id" class="card col-4 colxs6">
       <!-- background-color: #BAADCD !important; -->
       <div class="card-body bg-success" v-bind:class="{ chargeFixe: charge.categorie.id == 1 }" style="border: 3px solid #000; border-radius: 12px; padding-top: 15px; padding-left: 15px;">          
           <h5 class="card-title" style="font-size: 1.5em;">              
@@ -185,9 +185,6 @@
   .center {
     text-align: center;
   }
-  h5.card-title, h5.card-title > i {
-    font-size: 26px !important;
-  }
 
   .bg-success {
     background-color: #19cc98 !important;
@@ -201,7 +198,7 @@
   }  
 
   .chargeFixe {
-    background-color: #18bc9c !important;
+    background-color: #4A927D !important;
   }
 
   .btnEdit, .btnEdit:hover, .btnEdit:active, .btnEdit:enabled {
@@ -227,6 +224,12 @@
 
   .btnCreate {
     color: #1A7D0F; 
+  }
+
+  .colxs6 {
+    border: none; 
+    background-color: transparent; 
+    padding: 5px 10px 30px 25px;
   }
   
 </style>
