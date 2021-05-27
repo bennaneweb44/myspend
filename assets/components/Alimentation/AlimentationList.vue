@@ -8,13 +8,17 @@
             v-show="!currentDateFilter"
             class="fa fa-filter pull-left p-1 btnFilter" 
             title="Filtrer par date"
-            style="margin-left: 25px;">              
+            style="margin-left: 25px; color: whitesmoke !important">              
           </b-button>          
-          <div class="disabled" style="margin-top: -5px !important">                       
+          <div class="disabled" style="margin-top: -5px !important;">                       
             <a v-show="currentDateFilter" @click.prevent="deleteDateFilter()" class="" style="padding-left: 25px; padding-right: 10px; font-size: 1.5em; cursor: pointer; color: darkred">
               <i class="fa fa-times-circle" title="Supprimer filtre"></i>  
             </a>
-             <input type="text" v-model="currentDateFilter" disabled style="width: 45% !important; background-color: transparent; border: none; font-size: 1.2em; font-weight: bold; font-family: inherit;" />
+             <b-button v-b-modal.filter-alimentation 
+              v-show="currentDateFilter"                            
+              style="margin-left: -15px; color: whitesmoke !important; background-color: transparent; border: none; margin-top: -12px">
+              {{ currentDateFilter }}
+            </b-button> 
           </div>
       </div>
 

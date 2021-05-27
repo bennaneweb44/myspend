@@ -14,7 +14,11 @@
             <a v-show="currentDateFilter" @click.prevent="deleteDateFilter()" class="" style="padding-left: 25px; padding-right: 10px; font-size: 1.5em; cursor: pointer; color: darkred">
               <i class="fa fa-times-circle" title="Supprimer filtre"></i>  
             </a>
-             <input type="text" v-model="currentDateFilter" disabled style="width: 45% !important; background-color: transparent; border: none; font-size: 1.2em; font-weight: bold; font-family: inherit;" />
+            <b-button v-b-modal.filter-charges 
+              v-show="currentDateFilter"                            
+              style="margin-left: -15px; color: whitesmoke !important; background-color: transparent; border: none; margin-top: -12px">
+              {{ currentDateFilter }}
+            </b-button>   
           </div>
       </div>
 
@@ -33,12 +37,15 @@
     
     <div v-for="charge in charges" :key="charge.id" class="card col-4 colxs6">
       <!-- background-color: #BAADCD !important; -->
-      <div class="card-body bg-success" v-bind:class="{ chargeFixe: charge.categorie.id == 1 }" style="border: 3px solid #000; border-radius: 12px; padding-top: 15px; padding-left: 15px;">          
+        <div class="card-body bg-success" v-bind:class="{ chargeFixe: charge.categorie.id == 1 }" style="border: 3px solid #000; border-radius: 12px; padding-top: 15px; padding-left: 15px;">
           <h5 class="card-title" style="font-size: 1.5em;">              
             <i class="fa fa-calendar"></i> {{ charge.updatedAt | moment("DD/MM/YYYY") }}
             <b-button v-b-modal.edit-charge class="fa fa-pencil-square-o pull-right p-1 text-primary btnEdit"                
               @click.prevent="showModalEdit(charge.id)" 
               title="Modifer"></b-button>
+            <span v-show="charge.categorie.id == 1" class="pull-right mr-1">
+              <i class="badge badge-success">F</i>
+            </span>          
           </h5>            
           <p class="card-text">{{ charge.libelle }}</p>            
           <label href="#" class="btn-primary pl-1 pr-1 montantVignette" style="margin-right: 13px; margin-bottom: 42px" >{{ parseFloat(charge.montant).toFixed(2).toString().replace(".", ",") }} €</label>            
