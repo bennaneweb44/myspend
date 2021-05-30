@@ -40,3 +40,8 @@ services:
         class: App\Normalizer\DateTimeNormalizer
         tags:
             - { name: serializer.normalizer }
+
+    # Register EventListener onKernelResponse
+    App\EventListener\RequestListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
